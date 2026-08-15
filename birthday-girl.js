@@ -415,44 +415,7 @@ function renderFallbackSignatures() {
     });
 }
 
-// -------------------------------------------------------------
-// Background Music Control
-// -------------------------------------------------------------
-const bgMusic = document.getElementById("bg-music");
-const navMusicToggle = document.getElementById("nav-music-toggle");
-let isPlaying = false;
 
-function playMusic() {
-    bgMusic.play().then(() => {
-        isPlaying = true;
-        musicBtn.classList.add("playing");
-        navMusicToggle.classList.add("playing");
-        musicBtn.innerHTML = '<i class="fas fa-pause"></i>';
-        navMusicToggle.innerHTML = '<i class="fas fa-pause"></i>';
-    }).catch(err => {
-        console.log("Autoplay was blocked by browser. Click music icon to play.", err);
-    });
-}
-
-function pauseMusic() {
-    bgMusic.pause();
-    isPlaying = false;
-    musicBtn.classList.remove("playing");
-    navMusicToggle.classList.remove("playing");
-    musicBtn.innerHTML = '<i class="fas fa-music"></i>';
-    navMusicToggle.innerHTML = '<i class="fa-solid fa-music"></i>';
-}
-
-function toggleMusicControl() {
-    if (isPlaying) {
-        pauseMusic();
-    } else {
-        playMusic();
-    }
-}
-
-musicBtn.addEventListener("click", toggleMusicControl);
-navMusicToggle.addEventListener("click", toggleMusicControl);
 
 // -------------------------------------------------------------
 // Real-Time Dashboard Data Loader (Wishes, Memories, RSVPs)
