@@ -662,3 +662,180 @@ body {
     0%, 100% { box-shadow: var(--glass-shadow); }
     50% { box-shadow: 0 10px 25px rgba(0,0,0,0.5), 0 0 20px rgba(253, 160, 133, 0.45); }
 }
+
+/* -------------------------------------------------------------
+ * RSVP Modal Styles
+ * ------------------------------------------------------------- */
+.rsvp-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(13, 5, 6, 0.7);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    z-index: 10000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    animation: fadeIn 0.4s ease-out;
+}
+
+.rsvp-modal-content {
+    max-width: 500px;
+    width: 90%;
+    text-align: center;
+    padding: 3.5rem 2.5rem;
+    animation: scaleUp 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+.rsvp-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2.5rem;
+    font-weight: 300;
+    margin-bottom: 0.5rem;
+    color: var(--text-primary);
+}
+
+.rsvp-text {
+    font-size: 0.95rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin-bottom: 2rem;
+}
+
+.rsvp-divider {
+    height: 1px;
+    background: rgba(255, 117, 140, 0.15);
+    margin: 2rem 0;
+    width: 100%;
+}
+
+.rsvp-question {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.4rem;
+    font-weight: 400;
+    color: var(--rose-gold-light);
+    margin-bottom: 2.25rem;
+    line-height: 1.4;
+}
+
+.rsvp-btn-group {
+    display: flex;
+    gap: 1.5rem;
+    justify-content: center;
+}
+
+@media (max-width: 480px) {
+    .rsvp-btn-group {
+        flex-direction: column;
+        gap: 1rem;
+    }
+}
+
+.rsvp-option-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.6rem;
+    padding: 0.95rem 1.75rem;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 600;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.15);
+    width: 100%;
+}
+
+.yes-btn {
+    background: linear-gradient(135deg, rgba(253, 160, 133, 0.2) 0%, rgba(226, 137, 114, 0.05) 100%);
+    border: 1px solid rgba(253, 160, 133, 0.45);
+    color: var(--rose-gold-light);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+}
+
+.yes-btn:hover {
+    transform: translateY(-2px);
+    background: linear-gradient(135deg, rgba(253, 160, 133, 0.3) 0%, rgba(226, 137, 114, 0.1) 100%);
+    border-color: var(--rose-gold);
+    color: #fff;
+    box-shadow: 0 10px 20px rgba(253, 160, 133, 0.3);
+}
+
+.no-btn {
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    color: var(--text-muted);
+}
+
+.no-btn:hover {
+    transform: translateY(-2px);
+    border-color: rgba(255, 255, 255, 0.2);
+    color: var(--text-secondary);
+}
+
+/* Response screens */
+.rsvp-status-icon {
+    font-size: 4rem;
+    margin-bottom: 1.5rem;
+    display: inline-block;
+}
+
+.rsvp-status-icon.celebrate {
+    color: var(--gold);
+    text-shadow: 0 0 20px rgba(229, 193, 88, 0.4);
+    animation: rotateCelebrationIcon 1.5s ease infinite alternate;
+}
+
+.rsvp-status-icon.sad {
+    color: var(--text-muted);
+    animation: pulseSad 2.2s infinite;
+}
+
+.rsvp-finish-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.95rem 2.5rem;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 600;
+    border-radius: 50px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--glass-border);
+    color: var(--text-secondary);
+    cursor: pointer;
+    box-shadow: var(--glass-shadow);
+    transition: all 0.3s ease;
+    margin-top: 1rem;
+}
+
+.rsvp-finish-btn:hover {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: var(--rose-gold);
+    color: var(--rose-gold);
+    box-shadow: 0 5px 15px var(--glow-color);
+}
+
+/* Keyframes for RSVP elements */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes scaleUp {
+    from { opacity: 0; transform: scale(0.85); }
+    to { opacity: 1; transform: scale(1); }
+}
+
+@keyframes rotateCelebrationIcon {
+    0% { transform: rotate(-10deg) scale(1); }
+    100% { transform: rotate(10deg) scale(1.1); }
+}
+
+@keyframes pulseSad {
+    0%, 100% { transform: scale(1); opacity: 0.8; }
+    50% { transform: scale(1.05); opacity: 1; }
+}

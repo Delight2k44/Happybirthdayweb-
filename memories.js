@@ -401,19 +401,103 @@ function runPackagingSequence() {
 }
 
 // -------------------------------------------------------------
-// Final Button Redirection Handler
+// RSVP Modal & Redirection Handler
 // -------------------------------------------------------------
+const rsvpModal = document.getElementById("rsvp-modal");
+const rsvpQuestionView = document.getElementById("rsvp-question-view");
+const rsvpYesView = document.getElementById("rsvp-yes-view");
+const rsvpNoView = document.getElementById("rsvp-no-view");
+
+const rsvpYesBtn = document.getElementById("rsvp-yes-btn");
+const rsvpNoBtn = document.getElementById("rsvp-no-btn");
+
+const finishYesRedirect = document.getElementById("finish-yes-redirect");
+const finishNoRedirect = document.getElementById("finish-no-redirect");
+
+const localRsvpKey = "birthday_rsvp_backup";
+
+function saveLocalRsvp(name, attending) {
+    const backup = {
+        name,
+        attending,
+        createdAt: new Date().toISOString()
+    };
+    const current = localStorage.getItem(localRsvpKey);
+    const list = current ? JSON.parse(current) : [];
+    list.unshift(backup);
+    localStorage.setItem(localRsvpKey, JSON.stringify(list));
+}
+
+// When BUKA KOTAK button is clicked, show the RSVP modal
 finishBtn.addEventListener("click", () => {
-    // Final check confetti pop
     confetti({
-        particleCount: 150,
-        spread: 80,
+        particleCount: 100,
+        spread: 70,
         origin: { y: 0.6 }
     });
     
-    // Redirect back to welcome screen with success banner query parameter
-    setTimeout(() => {
-        alert("🎁 Kenangan manis Anda telah berhasil dibungkus dan dikirimkan ke dalam Kotak Ulang Tahunnya! Terima kasih! 🎉");
-        window.location.href = "index.html";
-    }, 1000);
+    // Display the RSVP Modal
+    rsvpModal.style.display = "flex";
+});
+
+// Helper to send RSVP data to Firebase
+async function submitRsvp(attending) {
+    const name = localStorage.getItem("sender_name") || "A Friend";
+    
+    if (firestoreEnabled) {
+        try {
+            await addDoc(collection(db, "rsvps"), {
+                name: name,
+                attending: attending,
+                createdAt: serverTimestamp()
+            });
+            console.log(`RSVP (${attending ? 'Yes' : 'No'}) saved to Firebase! 🌟`);
+        } catch (error) {
+            console.error("Failed uploading RSVP to Firebase, saving to backup:", error);
+            saveLocalRsvp(name, attending);
+        }
+    } else {
+        saveLocalRsvp(name, attending);
+    }
+}
+
+// RSVP - YES Button handler
+rsvpYesBtn.addEventListener("click", async () => {
+    rsvpYesBtn.disabled = true;
+    rsvpNoBtn.disabled = true;
+    
+    await submitRsvp(true);
+    
+    // Burst confetti!
+    confetti({
+        particleCount: 150,
+        spread: 80,
+        origin: { y: 0.6 },
+        colors: ['#fda085', '#ff758c', '#ffffff']
+    });
+
+    // Transition views
+    rsvpQuestionView.style.display = "none";
+    rsvpYesView.style.display = "block";
+});
+
+// RSVP - NO Button handler
+rsvpNoBtn.addEventListener("click", async () => {
+    rsvpYesBtn.disabled = true;
+    rsvpNoBtn.disabled = true;
+    
+    await submitRsvp(false);
+
+    // Transition views
+    rsvpQuestionView.style.display = "none";
+    rsvpNoView.style.display = "block";
+});
+
+// Redirection Handlers
+finishYesRedirect.addEventListener("click", () => {
+    window.location.href = "index.html";
+});
+
+finishNoRedirect.addEventListener("click", () => {
+    window.location.href = "index.html";
 });

@@ -138,6 +138,47 @@
         </main>
     </div>
 
+    <!-- RSVP Modal (Hidden by default) -->
+    <div id="rsvp-modal" class="rsvp-modal" style="display: none;">
+        <div class="rsvp-modal-content glass-card">
+            <!-- Phase 1: Question -->
+            <div id="rsvp-question-view">
+                <h2 class="rsvp-title">Terima Kasih! 💖</h2>
+                <p class="rsvp-text">Kenangan manis kamu sudah terbungkus rapi.</p>
+                <div class="rsvp-divider"></div>
+                <h3 class="rsvp-question">Apakah kamu akan menghadiri acara ulang tahunnya?</h3>
+                <div class="rsvp-btn-group">
+                    <button id="rsvp-yes-btn" class="rsvp-option-btn yes-btn">
+                        <i class="fa-solid fa-circle-check"></i> Ya, saya datang! 🎉
+                    </button>
+                    <button id="rsvp-no-btn" class="rsvp-option-btn no-btn">
+                        <i class="fa-solid fa-circle-xmark"></i> Tidak bisa hadir 🌸
+                    </button>
+                </div>
+            </div>
+
+            <!-- Phase 2: Yes Response -->
+            <div id="rsvp-yes-view" style="display: none;">
+                <i class="fa-solid fa-champagne-glasses rsvp-status-icon celebrate"></i>
+                <h2 class="rsvp-title">Sampai Jumpa di Sana! 🥳</h2>
+                <p class="rsvp-text">Kehadiranmu akan membuat hari spesial ini jauh lebih indah. Kami tidak sabar merayakannya bersama! 🎂✨</p>
+                <button class="rsvp-finish-btn" id="finish-yes-redirect">
+                    Selesai & Kembali 🏠
+                </button>
+            </div>
+
+            <!-- Phase 3: No Response -->
+            <div id="rsvp-no-view" style="display: none;">
+                <i class="fa-solid fa-heart-crack rsvp-status-icon sad"></i>
+                <h2 class="rsvp-title">Kami Mengerti... 🌸</h2>
+                <p class="rsvp-text">Sayang sekali kamu tidak bisa hadir, tetapi terima kasih banyak atas doa dan kenangan indah yang telah dikirimkan. Kamu akan tetap dirindukan! 💖</p>
+                <button class="rsvp-finish-btn" id="finish-no-redirect">
+                    Selesai & Kembali 🏠
+                </button>
+            </div>
+        </div>
+    </div>
+
     <!-- Script map -->
     <script type="importmap">
       {
