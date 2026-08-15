@@ -107,6 +107,10 @@
                     </div>
                     
                     <div class="opened-letter glass-card" id="personal-letter" style="display: none;">
+                        <!-- Banner Photo (images/Picture 2.jpeg styled in CSS) -->
+                        <div class="letter-banner-personal">
+                            <div class="banner-overlay"></div>
+                        </div>
                         <h2 class="letter-title">A Letter to Twenty-Two ✨</h2>
                         <div class="letter-divider"></div>
                         <div class="letter-body-text">
@@ -168,10 +172,20 @@
             </div>
         </header>
 
+        <!-- Dashboard Hero Banner (images/picture 3.jpeg styled in CSS) -->
+        <div class="dashboard-hero-banner">
+            <div class="banner-overlay"></div>
+        </div>
+
         <!-- Greeting Card -->
         <section class="welcome-section">
             <h1 class="welcome-title">Happy Birthday, Dearest Niece! 🎂✨</h1>
             <p class="welcome-desc">Welcome to your personal secret universe. Your friends and family have left beautiful wishes and memories just for you. Explore them below!</p>
+            <div class="welcome-action-buttons">
+                <button class="celebration-cta-btn" id="enter-celebration-room-btn">
+                    <i class="fa-solid fa-cake-candles"></i> Enter Celebration Room 🍰
+                </button>
+            </div>
         </section>
 
         <!-- Main Dashboard Content Grid -->
@@ -211,6 +225,104 @@
             </section>
 
         </main>
+    </div>
+
+    <!-- ==========================================
+         CELEBRATION ROOM (Full Screen Modal View)
+         ========================================== -->
+    <div class="celebration-room-container" id="celebration-view" style="display: none;">
+        <!-- Floating Background Photos Wrapper -->
+        <div class="floating-photos-container" id="floating-memories-bg"></div>
+
+        <!-- Celebration Room Navbar -->
+        <header class="celebration-nav">
+            <button id="leave-celebration-btn" class="close-celebration-btn">
+                <i class="fa-solid fa-arrow-left"></i> Dashboard
+            </button>
+            <div class="celebration-title-branding">✦ CELEBRATION ROOM ✦</div>
+            <button id="celebration-music-toggle" class="celebration-music-toggle-btn">
+                <i class="fa-solid fa-music"></i>
+            </button>
+        </header>
+
+        <!-- Central Cake Widget -->
+        <div class="cake-widget-container">
+            <div class="cake-assembly">
+                <div class="cake-plate"></div>
+                <div class="cake-body">
+                    <div class="cake-layer-bottom"></div>
+                    <div class="cake-layer-top"></div>
+                    <div class="cake-frosting-drips"></div>
+                </div>
+                <div class="candles-row">
+                    <div class="candle" id="candle-1">
+                        <div class="candle-wick"></div>
+                        <div class="candle-flame"></div>
+                        <div class="candle-smoke"></div>
+                    </div>
+                    <div class="candle" id="candle-2">
+                        <div class="candle-wick"></div>
+                        <div class="candle-flame"></div>
+                        <div class="candle-smoke"></div>
+                    </div>
+                    <div class="candle" id="candle-3">
+                        <div class="candle-wick"></div>
+                        <div class="candle-flame"></div>
+                        <div class="candle-smoke"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="cake-instruction-card">
+                <h3 id="cake-instruction-title">Make a Wish 🎂</h3>
+                <p id="cake-instruction-desc">Click the candles to blow them out!</p>
+            </div>
+        </div>
+
+        <!-- Bottom Animated Wishes Slideshow -->
+        <div class="wishes-slideshow-container" id="wishes-slideshow">
+            <div class="slideshow-wish-card" id="slideshow-card">
+                <p class="slideshow-message">"Wishing you a beautiful life filled with endless laughter..."</p>
+                <h4 class="slideshow-sender">— From a Friend</h4>
+            </div>
+        </div>
+
+        <!-- Background audio for cake blowing (Upbeat Happy Birthday) -->
+        <audio id="birthday-song" loop>
+            <source src="https://assets.mixkit.co/music/preview/mixkit-happy-birthday-to-you-1310.mp3" type="audio/mpeg">
+        </audio>
+    </div>
+
+    <!-- ==========================================
+         POLAROID RAIN ANIMATION CONTAINER
+         ========================================== -->
+    <div id="polaroid-rain-container" class="rain-overlay" style="display: none;"></div>
+
+    <!-- ==========================================
+         POLAROID MEMORY LIGHTBOX MODAL
+         ========================================== -->
+    <div class="lightbox-modal-overlay" id="memory-lightbox" style="display: none;">
+        <div class="lightbox-content-card">
+            <button class="lightbox-close-btn" id="close-lightbox-btn" aria-label="Close modal">✕</button>
+            
+            <h2 class="lightbox-title">Shared Memories Lane 📸</h2>
+            
+            <div class="lightbox-polaroids-row">
+                <!-- Polaroid 1 -->
+                <div class="lightbox-polaroid">
+                    <img id="lightbox-img-1" src="" alt="Memory Photo 1">
+                    <div class="lightbox-caption" id="lightbox-cap-1">Caption 1</div>
+                </div>
+                <!-- Polaroid 2 -->
+                <div class="lightbox-polaroid">
+                    <img id="lightbox-img-2" src="" alt="Memory Photo 2">
+                    <div class="lightbox-caption" id="lightbox-cap-2">Caption 2</div>
+                </div>
+            </div>
+            <div class="lightbox-author-tag">
+                Shared with love by <span id="lightbox-author-name">Friend</span>
+            </div>
+        </div>
     </div>
 
     <!-- Firebase configuration & app scripts -->

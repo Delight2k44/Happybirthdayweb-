@@ -899,3 +899,619 @@ body {
         transform: translateY(0) scale(1);
     }
 }
+
+/* -------------------------------------------------------------
+ * Custom Banners Integration
+ * ------------------------------------------------------------- */
+.letter-banner-personal {
+    width: 100%;
+    height: 190px;
+    background-image: url('images/Picture 2.jpeg');
+    background-size: cover;
+    background-position: center;
+    position: relative;
+    border-top-left-radius: 24px;
+    border-top-right-radius: 24px;
+    border-bottom: 1px solid rgba(253, 160, 133, 0.15);
+}
+
+.dashboard-hero-banner {
+    width: 100%;
+    height: 240px;
+    background-image: url('images/picture 3.jpeg');
+    background-size: cover;
+    background-position: center;
+    position: relative;
+    border-radius: 24px;
+    border: 1px solid rgba(253, 160, 133, 0.15);
+    margin-bottom: 2.5rem;
+    box-shadow: var(--glass-shadow);
+}
+
+/* Enter Celebration CTA Button */
+.welcome-action-buttons {
+    margin-top: 1.5rem;
+    display: flex;
+    justify-content: center;
+}
+
+.celebration-cta-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.95rem 2.25rem;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--rose-gold-light);
+    background: linear-gradient(135deg, rgba(253, 160, 133, 0.18) 0%, rgba(226, 137, 114, 0.04) 100%);
+    border: 1px solid rgba(253, 160, 133, 0.35);
+    border-radius: 50px;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+    animation: ctaPulse 2.5s infinite alternate;
+}
+
+.celebration-cta-btn:hover {
+    transform: translateY(-3px);
+    background: linear-gradient(135deg, rgba(253, 160, 133, 0.28) 0%, rgba(226, 137, 114, 0.08) 100%);
+    border-color: var(--rose-gold);
+    color: #fff;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.5), 0 0 20px rgba(253, 160, 133, 0.45);
+}
+
+/* -------------------------------------------------------------
+ * Full-Screen Celebration Room
+ * ------------------------------------------------------------- */
+.celebration-room-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    z-index: 1000;
+    background: radial-gradient(circle at center, #1b0a0d 0%, #080304 100%);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    overflow: hidden;
+    animation: roomFadeIn 0.8s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+}
+
+.celebration-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem 2.5rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+    position: relative;
+    z-index: 200;
+    background: rgba(8, 3, 4, 0.5);
+    backdrop-filter: blur(10px);
+}
+
+.close-celebration-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: transparent;
+    border: 1px solid var(--glass-border);
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+    font-weight: 600;
+    padding: 0.65rem 1.25rem;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.close-celebration-btn:hover {
+    color: var(--rose-gold);
+    border-color: var(--rose-gold);
+    box-shadow: 0 0 10px var(--glow-rose);
+}
+
+.celebration-title-branding {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.6rem;
+    font-weight: 300;
+    letter-spacing: 0.2em;
+    color: var(--rose-gold-light);
+    text-shadow: 0 0 10px var(--glow-rose);
+}
+
+.celebration-music-toggle-btn {
+    background: transparent;
+    border: 1px solid var(--glass-border);
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 50%;
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.celebration-music-toggle-btn:hover {
+    color: var(--rose-gold);
+    border-color: var(--rose-gold);
+}
+
+.celebration-music-toggle-btn.playing i {
+    animation: rotateMusic 4s linear infinite;
+}
+
+/* Floating photo elements in background */
+.floating-photos-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 10;
+    pointer-events: none;
+}
+
+.floating-photo-item {
+    position: absolute;
+    background: #ffffff;
+    border: 1px solid #e0dcdd;
+    padding: 6px 6px 20px 6px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.6);
+    border-radius: 2px;
+    width: 110px;
+    opacity: 0;
+    pointer-events: none;
+    animation: floatUpDrift 30s linear infinite;
+}
+
+.floating-photo-item img {
+    width: 100%;
+    height: 90px;
+    object-fit: cover;
+    border: 1px solid rgba(0,0,0,0.05);
+}
+
+/* -------------------------------------------------------------
+ * CSS Birthday Cake Widget
+ * ------------------------------------------------------------- */
+.cake-widget-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    flex: 1;
+    z-index: 100;
+    position: relative;
+    padding-bottom: 2rem;
+}
+
+.cake-assembly {
+    position: relative;
+    width: 260px;
+    height: 230px;
+    margin-bottom: 2.5rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.cake-assembly:hover {
+    transform: scale(1.03);
+}
+
+.cake-plate {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 290px;
+    height: 22px;
+    border-radius: 50%;
+    background: linear-gradient(to bottom, #d4af37 0%, #aa7c11 100%);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.7);
+    z-index: 5;
+}
+
+.cake-body {
+    position: absolute;
+    bottom: 12px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 220px;
+    height: 120px;
+    z-index: 10;
+}
+
+.cake-layer-bottom {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 60px;
+    background: #3d1c1d;
+    border-radius: 0 0 100px 100px / 0 0 25px 25px;
+    border-top: 4px solid #f99c85;
+}
+
+.cake-layer-top {
+    position: absolute;
+    bottom: 45px;
+    width: 100%;
+    height: 75px;
+    background: #fc886c;
+    border-radius: 100px / 25px;
+    box-shadow: inset 0 -4px 10px rgba(0,0,0,0.15);
+}
+
+.cake-frosting-drips {
+    position: absolute;
+    bottom: 75px;
+    width: 100%;
+    height: 25px;
+    background: #ffebdb;
+    border-radius: 100px / 12px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+/* Candles design */
+.candles-row {
+    position: absolute;
+    top: 55px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 2.2rem;
+    z-index: 20;
+}
+
+.candle {
+    width: 14px;
+    height: 55px;
+    background: repeating-linear-gradient(
+        45deg,
+        #ffd275,
+        #ffd275 6px,
+        #ffffff 6px,
+        #ffffff 12px
+    );
+    border-radius: 4px 4px 0 0;
+    position: relative;
+    box-shadow: inset 1px 0 3px rgba(0,0,0,0.15), 0 3px 6px rgba(0,0,0,0.1);
+}
+
+.candle-wick {
+    width: 2px;
+    height: 8px;
+    background: #333;
+    position: absolute;
+    top: -8px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.candle-flame {
+    width: 14px;
+    height: 24px;
+    background: radial-gradient(circle at bottom, #ffeb60 20%, #f77d3b 70%, transparent 100%);
+    border-radius: 50% 50% 20% 20%;
+    position: absolute;
+    top: -30px;
+    left: 50%;
+    transform: translateX(-50%);
+    box-shadow: 0 0 15px #ffd275, 0 0 30px #f77d3b;
+    animation: flicker 0.15s infinite alternate;
+    transition: all 0.4s ease;
+}
+
+/* Flame blown-out state */
+.candle.blown .candle-flame {
+    opacity: 0;
+    transform: translateX(-50%) scale(0);
+    pointer-events: none;
+}
+
+.candle-smoke {
+    position: absolute;
+    top: -12px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 4px;
+    height: 20px;
+    background: rgba(255, 255, 255, 0.4);
+    border-radius: 50%;
+    filter: blur(2px);
+    opacity: 0;
+    pointer-events: none;
+}
+
+.candle.blown .candle-smoke {
+    animation: riseSmoke 1.5s ease-out forwards;
+}
+
+.cake-instruction-card {
+    background: rgba(255, 255, 255, 0.015);
+    border: 1px solid var(--glass-border);
+    padding: 1.15rem 2rem;
+    border-radius: 18px;
+    backdrop-filter: blur(8px);
+    text-align: center;
+    box-shadow: var(--glass-shadow);
+}
+
+#cake-instruction-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.5rem;
+    color: var(--rose-gold-light);
+    margin-bottom: 0.25rem;
+}
+
+#cake-instruction-desc {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+}
+
+/* -------------------------------------------------------------
+ * Bottom Wishes Slideshow
+ * ------------------------------------------------------------- */
+.wishes-slideshow-container {
+    width: 100%;
+    max-width: 720px;
+    margin: 0 auto 4rem auto;
+    padding: 0 2rem;
+    z-index: 100;
+    position: relative;
+}
+
+.slideshow-wish-card {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid var(--glass-border-glow);
+    border-radius: 20px;
+    padding: 2.25rem;
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    box-shadow: var(--glass-shadow);
+    text-align: center;
+    transition: all 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+.slideshow-wish-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    background: linear-gradient(to right, var(--rose-gold), var(--gold), var(--rose-gold));
+}
+
+.slideshow-message {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 1.55rem;
+    line-height: 1.6;
+    color: var(--text-primary);
+    margin-bottom: 1.25rem;
+    text-shadow: var(--text-glow);
+}
+
+.slideshow-sender {
+    font-size: 0.85rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    color: var(--rose-gold);
+    text-transform: uppercase;
+}
+
+/* -------------------------------------------------------------
+ * Falling Polaroid Rain (Raindrop Transition)
+ * ------------------------------------------------------------- */
+.rain-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 9999;
+    pointer-events: none;
+    overflow: hidden;
+}
+
+.falling-polaroid {
+    position: absolute;
+    background: #ffffff;
+    border: 3px solid #ffffff;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+    padding: 5px 5px 18px 5px;
+    width: 75px;
+    height: 90px;
+    opacity: 0.9;
+    pointer-events: none;
+    animation: polaroidRainFall 2.8s linear forwards;
+}
+
+.falling-polaroid img {
+    width: 100%;
+    height: 65px;
+    object-fit: cover;
+}
+
+/* -------------------------------------------------------------
+ * Polaroid Memory Lightbox Modal
+ * ------------------------------------------------------------- */
+.lightbox-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1050;
+    background: rgba(8, 3, 4, 0.9);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    animation: roomFadeIn 0.5s ease forwards;
+}
+
+.lightbox-content-card {
+    max-width: 900px;
+    width: 100%;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid var(--glass-border-glow);
+    border-radius: 24px;
+    padding: 3.5rem 2.5rem;
+    box-shadow: var(--glass-shadow);
+    text-align: center;
+    position: relative;
+}
+
+.lightbox-close-btn {
+    position: absolute;
+    top: 1.5rem;
+    right: 1.5rem;
+    background: transparent;
+    border: none;
+    color: var(--text-muted);
+    font-size: 1.5rem;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.lightbox-close-btn:hover {
+    color: var(--rose-gold);
+    transform: scale(1.15);
+}
+
+.lightbox-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2.5rem;
+    font-weight: 300;
+    margin-bottom: 2.5rem;
+    color: var(--text-primary);
+}
+
+.lightbox-polaroids-row {
+    display: flex;
+    justify-content: center;
+    gap: 3rem;
+    margin-bottom: 2.5rem;
+    flex-wrap: wrap;
+}
+
+.lightbox-polaroid {
+    background: #ffffff;
+    border: 1px solid #e0dcdd;
+    box-shadow: 0 12px 30px rgba(0,0,0,0.6);
+    padding: 10px 10px 32px 10px;
+    border-radius: 2px;
+    width: 250px;
+    transform: rotate(-2deg);
+    transition: all 0.3s;
+}
+
+.lightbox-polaroid:nth-child(even) {
+    transform: rotate(2deg);
+}
+
+.lightbox-polaroid:hover {
+    transform: scale(1.04) rotate(0deg);
+}
+
+.lightbox-polaroid img {
+    width: 100%;
+    height: 190px;
+    object-fit: cover;
+    border: 1px solid rgba(0,0,0,0.05);
+}
+
+.lightbox-caption {
+    font-family: 'Caveat', cursive;
+    font-size: 1.45rem;
+    font-weight: 700;
+    color: #3c2a2d;
+    margin-top: 10px;
+    text-align: center;
+}
+
+.lightbox-author-tag {
+    font-size: 0.95rem;
+    color: var(--text-secondary);
+}
+
+#lightbox-author-name {
+    font-family: 'Caveat', cursive;
+    font-size: 1.55rem;
+    color: var(--rose-gold);
+}
+
+/* -------------------------------------------------------------
+ * CSS Keyframes Upgrade
+ * ------------------------------------------------------------- */
+@keyframes ctaPulse {
+    from {
+        box-shadow: 0 4px 15px rgba(0,0,0,0.3), 0 0 8px rgba(253,160,133,0.1);
+        border-color: rgba(253, 160, 133, 0.35);
+    }
+    to {
+        box-shadow: 0 6px 20px rgba(0,0,0,0.4), 0 0 15px rgba(253,160,133,0.35);
+        border-color: var(--rose-gold);
+    }
+}
+
+@keyframes flicker {
+    0% { transform: translateX(-50%) scale(1); opacity: 0.9; }
+    100% { transform: translateX(-50%) scale(1.05); opacity: 1; }
+}
+
+@keyframes riseSmoke {
+    0% {
+        opacity: 0.7;
+        transform: translateX(-50%) translateY(0) scale(1);
+    }
+    50% {
+        opacity: 0.4;
+        transform: translateX(-60%) translateY(-25px) scale(1.5);
+    }
+    100% {
+        opacity: 0;
+        transform: translateX(-30%) translateY(-60px) scale(2);
+    }
+}
+
+@keyframes floatUpDrift {
+    0% {
+        transform: translateY(110vh) rotate(0deg) translateX(0);
+        opacity: 0;
+    }
+    10% {
+        opacity: 0.65;
+    }
+    90% {
+        opacity: 0.65;
+    }
+    100% {
+        transform: translateY(-20vh) rotate(360deg) translateX(35px);
+        opacity: 0;
+    }
+}
+
+@keyframes polaroidRainFall {
+    0% {
+        transform: translateY(-120px) rotate(0deg);
+        opacity: 0.9;
+    }
+    100% {
+        transform: translateY(105vh) rotate(720deg);
+        opacity: 0;
+    }
+}
+
+@keyframes roomFadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}

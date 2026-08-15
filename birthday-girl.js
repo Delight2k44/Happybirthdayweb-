@@ -465,6 +465,10 @@ const wishesList = document.getElementById("dashboard-wishes-list");
 const memoriesList = document.getElementById("dashboard-memories-list");
 const rsvpList = document.getElementById("dashboard-rsvp-list");
 
+// Global arrays to store data for the slideshow and overlays
+window.allUploadedWishes = [];
+window.allUploadedMemories = [];
+
 function loadDashboardData() {
     if (!firestoreEnabled) {
         renderFallbackStates();
@@ -481,6 +485,8 @@ function loadDashboardData() {
             if (data.name && data.message) wishes.push(data);
         });
         
+        window.allUploadedWishes = wishes;
+
         if (wishes.length === 0) {
             renderEmptyState(wishesList, "wishes");
         } else {
@@ -511,37 +517,22 @@ function loadDashboardData() {
             if (data.photo1 && data.photo2) memories.push(data);
         });
 
+        window.allUploadedMemories = memories;
+
         if (memories.length === 0) {
             renderEmptyState(memoriesList, "memories");
         } else {
             memories.forEach((mem, idx) => {
                 const card = document.createElement("div");
                 card.className = "memory-card";
-                card.id = `mem-card-${idx}`;
-                
-                // Set up double photo flipping structure
-                // Shows Photo 1 initially. Clicking on polaroid toggles/flips to Photo 2!
                 card.innerHTML = `
-                    <img id="mem-img-${idx}" src="${mem.photo1}" alt="Memory photo">
-                    <span class="caption" id="mem-cap-${idx}">${mem.caption1}</span>
+                    <img src="${mem.photo1}" alt="Memory photo">
+                    <span class="caption">${mem.caption1}</span>
                     <span class="author">Shared by ${mem.name}</span>
                 `;
                 
-                let activePhoto = 1;
                 card.addEventListener("click", () => {
-                    const imgNode = document.getElementById(`mem-img-${idx}`);
-                    const capNode = document.getElementById(`mem-cap-${idx}`);
-                    if (activePhoto === 1) {
-                        imgNode.src = mem.photo2;
-                        capNode.textContent = mem.caption2;
-                        activePhoto = 2;
-                        // small flip confetti shake
-                        confetti({ particleCount: 15, spread: 20, origin: { y: 0.8 } });
-                    } else {
-                        imgNode.src = mem.photo1;
-                        capNode.textContent = mem.caption1;
-                        activePhoto = 1;
-                    }
+                    openMemoryLightbox(mem);
                 });
                 
                 memoriesList.appendChild(card);
@@ -609,4 +600,309 @@ function renderFallbackStates() {
     renderEmptyState(wishesList, "wishes");
     renderEmptyState(memoriesList, "memories");
     renderEmptyState(rsvpList, "rsvps");
+}
+
+// -------------------------------------------------------------
+// Polaroid Memory Lightbox & Polaroid Rain Transitions
+// -------------------------------------------------------------
+const memoryLightbox = document.getElementById("memory-lightbox");
+const closeLightboxBtn = document.getElementById("close-lightbox-btn");
+const rainContainer = document.getElementById("polaroid-rain-container");
+
+const lightboxImg1 = document.getElementById("lightbox-img-1");
+const lightboxImg2 = document.getElementById("lightbox-img-2");
+const lightboxCap1 = document.getElementById("lightbox-cap-1");
+const lightboxCap2 = document.getElementById("lightbox-cap-2");
+const lightboxAuthorName = document.getElementById("lightbox-author-name");
+
+function openMemoryLightbox(mem) {
+    // 1. Trigger Polaroid rain shower raindrops effect
+    triggerPolaroidRain();
+    
+    // 2. Open the Lightbox modal after rain transitions (delay 900ms)
+    setTimeout(() => {
+        lightboxImg1.src = mem.photo1;
+        lightboxImg2.src = mem.photo2;
+        lightboxCap1.textContent = mem.caption1;
+        lightboxCap2.textContent = mem.caption2;
+        lightboxAuthorName.textContent = mem.name;
+        
+        memoryLightbox.style.display = "flex";
+    }, 900);
+}
+
+closeLightboxBtn.addEventListener("click", () => {
+    memoryLightbox.style.display = "none";
+});
+
+// Render falling polaroids raindrops style
+function triggerPolaroidRain() {
+    // Collect images pool (use fallback if empty)
+    let imagesPool = [];
+    if (window.allUploadedMemories && window.allUploadedMemories.length > 0) {
+        window.allUploadedMemories.forEach(m => {
+            imagesPool.push(m.photo1);
+            imagesPool.push(m.photo2);
+        });
+    } else {
+        // Fallbacks
+        imagesPool = [
+            "images/Picture 1.jpeg",
+            "images/Picture 2.jpeg",
+            "images/picture 3.jpeg"
+        ];
+    }
+
+    rainContainer.innerHTML = "";
+    rainContainer.style.display = "block";
+
+    const raindropsCount = 18;
+    for (let i = 0; i < raindropsCount; i++) {
+        const div = document.createElement("div");
+        div.className = "falling-polaroid";
+        
+        // Random horizontal start pos
+        div.style.left = `${Math.random() * 95}%`;
+        
+        // Random falling duration (e.g. 2s to 3.5s)
+        const duration = Math.random() * 1.5 + 2.0;
+        div.style.animationDuration = `${duration}s`;
+        
+        // Random delay start
+        const delay = Math.random() * 0.4;
+        div.style.animationDelay = `${delay}s`;
+
+        // Pick random photo
+        const imgSrc = imagesPool[Math.floor(Math.random() * imagesPool.length)];
+        div.innerHTML = `<img src="${imgSrc}" alt="Rain photo">`;
+
+        rainContainer.appendChild(div);
+    }
+
+    // Hide rain container after it completes
+    setTimeout(() => {
+        rainContainer.style.style = "none";
+        rainContainer.innerHTML = "";
+    }, 4500);
+}
+
+// -------------------------------------------------------------
+// Celebration Room Navigation & Actions
+// -------------------------------------------------------------
+const enterCelebrationBtn = document.getElementById("enter-celebration-room-btn");
+const leaveCelebrationBtn = document.getElementById("leave-celebration-btn");
+const celebrationView = document.getElementById("celebration-view");
+const floatingMemoriesBg = document.getElementById("floating-memories-bg");
+const wishesSlideshow = document.getElementById("wishes-slideshow");
+const slideshowCard = document.getElementById("slideshow-card");
+const birthdaySong = document.getElementById("birthday-song");
+const celebrationMusicToggle = document.getElementById("celebration-music-toggle");
+
+let wishesCycleInterval = null;
+let currentWishIndex = 0;
+
+enterCelebrationBtn.addEventListener("click", () => {
+    // Stop standard dashboard music
+    pauseMusic();
+    
+    // Switch views
+    dashboardView.style.opacity = 0;
+    setTimeout(() => {
+        dashboardView.style.display = "none";
+        celebrationView.style.display = "flex";
+        celebrationView.style.opacity = 0;
+        
+        setTimeout(() => {
+            celebrationView.style.opacity = 1;
+        }, 50);
+        
+        // Start interactive loops
+        startCelebrationRoomLoops();
+    }, 500);
+});
+
+leaveCelebrationBtn.addEventListener("click", () => {
+    // Pause birthday song
+    birthdaySong.pause();
+    birthdaySong.currentTime = 0;
+    celebrationMusicToggle.classList.remove("playing");
+
+    // Clear loops
+    clearInterval(wishesCycleInterval);
+    floatingMemoriesBg.innerHTML = "";
+
+    // Switch views back to dashboard
+    celebrationView.style.opacity = 0;
+    setTimeout(() => {
+        celebrationView.style.display = "none";
+        dashboardView.style.display = "block";
+        dashboardView.style.opacity = 0;
+        
+        setTimeout(() => {
+            dashboardView.style.opacity = 1;
+        }, 50);
+        
+        // Reset candles wicks status
+        resetCakeCandles();
+    }, 500);
+});
+
+// Play/Pause song in celebration room
+celebrationMusicToggle.addEventListener("click", () => {
+    if (birthdaySong.paused) {
+        birthdaySong.play();
+        celebrationMusicToggle.classList.add("playing");
+    } else {
+        birthdaySong.pause();
+        celebrationMusicToggle.classList.remove("playing");
+    }
+});
+
+function startCelebrationRoomLoops() {
+    // 1. Build background floating photos collage
+    buildFloatingMemories();
+
+    // 2. Start bottom wishes slideshow cycling (40 sec timer!)
+    startWishesSlideshowCycle();
+}
+
+// -------------------------------------------------------------
+// Interactive Celebration Cake Blow Logic
+// -------------------------------------------------------------
+const candlesList = document.querySelectorAll(".candle");
+const cakeAssembly = document.querySelector(".cake-assembly");
+const cakeInstructionTitle = document.getElementById("cake-instruction-title");
+const cakeInstructionDesc = document.getElementById("cake-instruction-desc");
+
+let cakeBlown = false;
+
+cakeAssembly.addEventListener("click", () => {
+    if (!cakeBlown) {
+        blowOutCandles();
+    }
+});
+
+function blowOutCandles() {
+    cakeBlown = true;
+    
+    // Add blown class to all candles (triggers CSS wick smoke + flame hide)
+    candlesList.forEach(c => c.classList.add("blown"));
+    
+    // Update labels
+    cakeInstructionTitle.textContent = "Candles Blown! 🌟";
+    cakeInstructionDesc.textContent = "Happy Birthday, Frost! Enjoy your special day! 💖";
+
+    // Play Upbeat Happy Birthday song
+    birthdaySong.play().then(() => {
+        celebrationMusicToggle.classList.add("playing");
+    }).catch(e => console.warn("Song blocked until user interacted", e));
+
+    // Massive screen-wide confetti shower loops
+    const end = Date.now() + (8 * 1000);
+    const interval = setInterval(() => {
+        if (Date.now() > end) {
+            clearInterval(interval);
+            return;
+        }
+        confetti({
+            particleCount: 50,
+            spread: 80,
+            origin: { y: 0.6 }
+        });
+    }, 1000);
+}
+
+function resetCakeCandles() {
+    cakeBlown = false;
+    candlesList.forEach(c => c.classList.remove("blown"));
+    cakeInstructionTitle.textContent = "Make a Wish 🎂";
+    cakeInstructionDesc.textContent = "Click the candles to blow them out!";
+}
+
+// -------------------------------------------------------------
+// Celebration Background: Floating Polaroid Memory Collage
+// -------------------------------------------------------------
+function buildFloatingMemories() {
+    floatingMemoriesBg.innerHTML = "";
+    
+    let photosList = [];
+    if (window.allUploadedMemories && window.allUploadedMemories.length > 0) {
+        window.allUploadedMemories.forEach(m => {
+            photosList.push(m.photo1);
+            photosList.push(m.photo2);
+        });
+    } else {
+        photosList = [
+            "images/Picture 1.jpeg",
+            "images/Picture 2.jpeg",
+            "images/picture 3.jpeg"
+        ];
+    }
+
+    // Spawn 10 floating photo units at random horizontal offsets
+    const spawnCount = 10;
+    for (let i = 0; i < spawnCount; i++) {
+        const item = document.createElement("div");
+        item.className = "floating-photo-item";
+        
+        // Random horizontal pos
+        item.style.left = `${Math.random() * 85}%`;
+        
+        // Random falling duration (drift speed)
+        const duration = Math.random() * 15 + 20; // 20s to 35s
+        item.style.animationDuration = `${duration}s`;
+        
+        // Random delay
+        const delay = Math.random() * 8;
+        item.style.animationDelay = `${delay}s`;
+
+        // Pick photo
+        const src = photosList[i % photosList.length];
+        item.innerHTML = `<img src="${src}" alt="Memories background">`;
+        
+        floatingMemoriesBg.appendChild(item);
+    }
+}
+
+// -------------------------------------------------------------
+// Celebration Bottom: Animated Wishes Slideshow Cycle (40s Interval)
+// -------------------------------------------------------------
+function startWishesSlideshowCycle() {
+    clearInterval(wishesCycleInterval);
+    
+    const wishesList = window.allUploadedWishes || [];
+    if (wishesList.length === 0) {
+        slideshowCard.innerHTML = `
+            <p class="slideshow-message">"Wishing you a beautiful life filled with endless laughter..."</p>
+            <h4 class="slideshow-sender">— From a Friend</h4>
+        `;
+        return;
+    }
+
+    currentWishIndex = 0;
+    renderSlideshowWish(wishesList[currentWishIndex]);
+
+    // Loop interval set to exactly 40 seconds as requested!
+    wishesCycleInterval = setInterval(() => {
+        currentWishIndex = (currentWishIndex + 1) % wishesList.length;
+        
+        // Fade out
+        slideshowCard.style.opacity = 0;
+        slideshowCard.style.transform = "translateY(15px)";
+        
+        setTimeout(() => {
+            renderSlideshowWish(wishesList[currentWishIndex]);
+            
+            // Fade in
+            slideshowCard.style.opacity = 1;
+            slideshowCard.style.transform = "translateY(0)";
+        }, 600);
+    }, 40000);
+}
+
+function renderSlideshowWish(wish) {
+    slideshowCard.innerHTML = `
+        <p class="slideshow-message">"${wish.message}"</p>
+        <h4 class="slideshow-sender">— From ${wish.name}</h4>
+    `;
 }
