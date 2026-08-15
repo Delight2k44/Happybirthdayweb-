@@ -290,3 +290,56 @@ wishForm.addEventListener("submit", async (e) => {
     nameInput.value = "";
     messageInput.value = "";
 });
+
+// -------------------------------------------------------------
+// Welcome Envelope & Letter Transition Controls
+// -------------------------------------------------------------
+const sealedEnvelope = document.getElementById("sealed-envelope");
+const welcomeLetter = document.getElementById("welcome-letter");
+const proceedToWishesBtn = document.getElementById("proceed-to-wishes-btn");
+const wishesBoardContainer = document.getElementById("wishes-board-container");
+const envelopeWrapper = document.getElementById("envelope-wrapper");
+
+// Envelope Open trigger
+if (sealedEnvelope) {
+    sealedEnvelope.addEventListener("click", () => {
+        confetti({
+            particleCount: 80,
+            spread: 50,
+            origin: { y: 0.6 },
+            colors: ['#fda085', '#ff758c', '#ffffff']
+        });
+        
+        sealedEnvelope.style.display = "none";
+        welcomeLetter.style.display = "block";
+    });
+}
+
+// Letter proceed to wishes board trigger
+if (proceedToWishesBtn) {
+    proceedToWishesBtn.addEventListener("click", () => {
+        confetti({
+            particleCount: 50,
+            spread: 40,
+            origin: { y: 0.8 },
+            colors: ['#fda085', '#ff758c', '#ffffff']
+        });
+        
+        // Hide envelope/letter layout smoothly
+        envelopeWrapper.style.opacity = 0;
+        envelopeWrapper.style.transition = "opacity 0.6s ease";
+        
+        setTimeout(() => {
+            envelopeWrapper.style.display = "none";
+            
+            // Show Wishes board with fade in
+            wishesBoardContainer.style.display = "block";
+            wishesBoardContainer.style.opacity = 0;
+            wishesBoardContainer.style.transition = "opacity 0.6s ease";
+            
+            setTimeout(() => {
+                wishesBoardContainer.style.opacity = 1;
+            }, 50);
+        }, 600);
+    });
+}

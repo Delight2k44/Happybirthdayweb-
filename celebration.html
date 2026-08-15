@@ -44,8 +44,48 @@
         </button>
     </header>
 
+    <!-- Envelope & Letter Container -->
+    <div class="envelope-wrapper" id="envelope-wrapper">
+        <!-- Sealed Envelope -->
+        <div class="envelope-card" id="sealed-envelope">
+            <div class="envelope-seal">💌</div>
+            <h2 class="envelope-to">To My Friends 🤍</h2>
+            <p class="envelope-hint">Click to open letter</p>
+        </div>
+
+        <!-- Unfolded Letter (Hidden initially) -->
+        <div class="letter-card glass-card" id="welcome-letter" style="display: none;">
+            <!-- Banner Photo -->
+            <div class="letter-banner">
+                <div class="banner-overlay"></div>
+            </div>
+            
+            <div class="letter-content">
+                <span class="letter-quote">"The people we meet become part of our story."</span>
+                
+                <h2 class="letter-heading">Hi everyone 🤍</h2>
+                
+                <div class="letter-body">
+                    <p>Today, as I celebrate 22 years of life, I find myself reflecting on the people, moments, laughter, lessons, and memories that have shaped me into the person I am becoming.</p>
+                    <p>Life has given me beautiful friendships, meaningful conversations, unexpected lessons, and countless moments that I will carry with me forever. Some of you have walked beside me for years, while others crossed my path for only a season. Yet each of you has left a mark on my journey.</p>
+                    <p>If we have ever shared a classroom, a conversation, a friendship, a workplace, a campaign, a prayer, a laugh, or a moment together, I would love for you to leave a memory, a message, or a few words about our journey.</p>
+                    <p>Your words will become one of my most treasured birthday gifts.</p>
+                </div>
+                
+                <div class="letter-signature">
+                    With love,<br>
+                    <span class="sig-name">Frost ✨</span>
+                </div>
+                
+                <button class="proceed-btn" id="proceed-to-wishes-btn">
+                    Leave a Wish <i class="fa-solid fa-heart"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
     <!-- Wishes Board Grid Container -->
-    <div class="board-container">
+    <div class="board-container" id="wishes-board-container" style="display: none;">
         <div class="content-header">
             <div class="sub-header">
                 <span class="diamond-icon">✦</span>

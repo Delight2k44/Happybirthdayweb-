@@ -438,3 +438,225 @@ body {
     from { opacity: 0; transform: translateY(20px); }
     to { opacity: 1; transform: translateY(0); }
 }
+
+/* -------------------------------------------------------------
+ * Welcome Envelope & Letter Animations
+ * ------------------------------------------------------------- */
+.envelope-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    min-height: 70vh;
+    z-index: 10;
+    position: relative;
+}
+
+/* Sealed Envelope Card */
+.envelope-card {
+    width: 360px;
+    height: 240px;
+    background: rgba(255, 255, 255, 0.015);
+    border: 1px solid var(--glass-border-glow);
+    border-radius: 20px;
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    box-shadow: var(--glass-shadow);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    position: relative;
+    overflow: hidden;
+}
+
+.envelope-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle at center, rgba(253, 160, 133, 0.08) 0%, transparent 80%);
+    pointer-events: none;
+}
+
+.envelope-card:hover {
+    transform: translateY(-8px) rotate(-1deg);
+    border-color: var(--rose-gold);
+    box-shadow: 0 15px 35px rgba(0,0,0,0.65), 0 0 20px rgba(253, 160, 133, 0.3);
+}
+
+.envelope-seal {
+    font-size: 3.5rem;
+    margin-bottom: 1.25rem;
+    filter: drop-shadow(0 0 10px rgba(253,160,133,0.3));
+    animation: heartBeat 2s infinite ease-in-out;
+}
+
+.envelope-to {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.6rem;
+    font-weight: 300;
+    color: var(--text-primary);
+    margin-bottom: 0.5rem;
+}
+
+.envelope-hint {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    animation: pulseHint 2s infinite ease-in-out;
+}
+
+/* Welcome Letter Card */
+.letter-card {
+    max-width: 680px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 0; /* padding handled inside letter-content */
+    animation: letterOpen 1s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+}
+
+/* Banner Photo container at top of letter */
+.letter-banner {
+    width: 100%;
+    height: 220px;
+    background-image: url('https://images.unsplash.com/photo-1507504038482-76214372a54a?auto=format&fit=crop&q=80&w=1200'); /* Warm aesthetic bokeh placeholder */
+    background-size: cover;
+    background-position: center;
+    position: relative;
+    border-top-left-radius: 24px;
+    border-top-right-radius: 24px;
+    border-bottom: 1px solid rgba(253,160,133,0.15);
+}
+
+.banner-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to bottom, transparent 30%, rgba(13,5,6,0.95) 100%);
+}
+
+.letter-content {
+    padding: 3rem 3.5rem 4rem 3.5rem;
+    text-align: center;
+}
+
+@media (max-width: 600px) {
+    .letter-content {
+        padding: 2.25rem 2rem 3rem 2rem;
+    }
+}
+
+.letter-quote {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 1.35rem;
+    color: var(--rose-gold);
+    display: block;
+    margin-bottom: 2.5rem;
+    letter-spacing: 0.05em;
+    text-shadow: var(--text-glow);
+}
+
+.letter-heading {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2.25rem;
+    font-weight: 300;
+    margin-bottom: 1.5rem;
+    color: var(--text-primary);
+    text-align: left;
+}
+
+.letter-body {
+    font-size: 0.95rem;
+    line-height: 1.85;
+    color: var(--text-secondary);
+    text-align: left;
+    margin-bottom: 2.5rem;
+    font-weight: 300;
+}
+
+.letter-body p {
+    margin-bottom: 1.5rem;
+}
+
+.letter-body p:last-child {
+    margin-bottom: 0;
+}
+
+.letter-signature {
+    text-align: right;
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 1.2rem;
+    color: var(--text-secondary);
+    margin-bottom: 3.5rem;
+}
+
+.sig-name {
+    font-family: 'Caveat', cursive;
+    font-size: 2.25rem;
+    font-weight: 700;
+    color: var(--rose-gold-light);
+    display: inline-block;
+    margin-top: 0.25rem;
+    text-shadow: var(--text-glow);
+}
+
+/* Proceed button to reveal Wishes Board */
+.proceed-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    padding: 1.1rem 3.5rem;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    border-radius: 50px;
+    background: linear-gradient(135deg, rgba(253, 160, 133, 0.15) 0%, rgba(226, 137, 114, 0.04) 100%);
+    border: 1px solid rgba(253, 160, 133, 0.35);
+    color: var(--rose-gold-light);
+    cursor: pointer;
+    box-shadow: var(--glass-shadow);
+    transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+.proceed-btn:hover {
+    transform: translateY(-3px);
+    background: linear-gradient(135deg, rgba(253, 160, 133, 0.25) 0%, rgba(226, 137, 114, 0.08) 100%);
+    border-color: var(--rose-gold);
+    color: #fff;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.5), 
+                0 0 20px rgba(253, 160, 133, 0.55);
+}
+
+/* Keyframes */
+@keyframes heartBeat {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.08); }
+}
+
+@keyframes pulseHint {
+    0%, 100% { opacity: 0.4; }
+    50% { opacity: 1; }
+}
+
+@keyframes letterOpen {
+    from {
+        opacity: 0;
+        transform: translateY(60px) scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
