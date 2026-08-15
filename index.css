@@ -400,6 +400,38 @@ body {
     60% { transform: rotate(0); }
 }
 
+/* Birthday Girl Access Portal Styling */
+.birthday-girl-portal {
+    margin-top: 1.5rem;
+    text-align: center;
+    animation: fadeInUp 1s ease;
+}
+
+.portal-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.82rem;
+    color: var(--rose-gold-light);
+    text-decoration: none;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    padding: 0.5rem 1.1rem;
+    border-radius: 30px;
+    border: 1px solid rgba(255, 117, 151, 0.15);
+    background: rgba(255, 117, 151, 0.04);
+    transition: all 0.3s ease;
+    font-weight: 500;
+}
+
+.portal-link:hover {
+    color: #fff;
+    background: rgba(255, 117, 151, 0.15);
+    border-color: var(--rose-gold);
+    box-shadow: 0 0 15px rgba(255, 117, 151, 0.2);
+    transform: translateY(-2px);
+}
+
 /* Designed by Credits Footer styling */
 .marking-footer {
     font-size: 0.75rem;

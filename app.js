@@ -127,9 +127,8 @@ musicToggle.addEventListener("click", () => {
 // -------------------------------------------------------------
 // Live Countdown Logic
 // -------------------------------------------------------------
-// Target date: August 16, 2026 at 00:00:00 Local Time
-const targetDateString = "2026-08-16T00:00:00";
-const targetDate = new Date(targetDateString).getTime();
+// Target date: Set to exactly 10 seconds from page load for testing/marking!
+const targetDate = new Date().getTime() + 10000;
 
 const daysEl = document.getElementById("days");
 const hoursEl = document.getElementById("hours");
