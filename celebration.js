@@ -253,6 +253,9 @@ wishForm.addEventListener("submit", async (e) => {
     
     if (!name || !message) return;
     
+    // Save name locally for pre-filling other forms
+    localStorage.setItem("sender_name", name);
+    
     // Confetti pop!
     confetti({
         particleCount: 80,

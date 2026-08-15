@@ -1,8 +1,9 @@
-// Import Firebase (saved for later structure if needed)
+// Import Firebase functions
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
+import { getFirestore, collection, addDoc, serverTimestamp } from "firebase/firestore";
 
-// Your web app's Firebase configuration (saved for later sync)
+// Your web app's Firebase configuration
 const firebaseConfig = {
   apiKey: "AIzaSyBenytTRI-15x8wAUuAvkedbw535xUUt-s",
   authDomain: "happy-birthday-ff3ad.firebaseapp.com",
@@ -16,6 +17,18 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
+
+// Initialize Firestore
+let db;
+let firestoreEnabled = false;
+
+try {
+    db = getFirestore(app);
+    firestoreEnabled = true;
+    console.log("Firebase Firestore initialized for memories! 🌟");
+} catch (error) {
+    console.warn("Firestore initialization failed. Using LocalStorage fallback.", error);
+}
 
 // -------------------------------------------------------------
 // HTML5 Canvas - Ambient Floating Particles (Bokeh Effect)
@@ -118,9 +131,15 @@ musicToggle.addEventListener("click", () => {
     }
 });
 
-// Try to auto-play when user lands on this page
+// Try to auto-play when user lands on this page and pre-fill name
 document.addEventListener("DOMContentLoaded", () => {
     setTimeout(playMusic, 500);
+    
+    const savedName = localStorage.getItem("sender_name");
+    if (savedName) {
+        const nameField = document.getElementById("sender-name");
+        if (nameField) nameField.value = savedName;
+    }
 });
 
 // -------------------------------------------------------------
@@ -194,6 +213,55 @@ fileInputs.forEach((input, index) => {
         }
     });
 });
+// Image compression helper
+function compressImage(dataUrl, maxWidth = 600, maxHeight = 600, quality = 0.7) {
+    return new Promise((resolve) => {
+        const img = new Image();
+        img.src = dataUrl;
+        img.onload = () => {
+            const canvas = document.createElement("canvas");
+            let width = img.width;
+            let height = img.height;
+
+            if (width > height) {
+                if (width > maxWidth) {
+                    height = Math.round((height * maxWidth) / width);
+                    width = maxWidth;
+                }
+            } else {
+                if (height > maxHeight) {
+                    width = Math.round((width * maxHeight) / height);
+                    height = maxHeight;
+                }
+            }
+
+            canvas.width = width;
+            canvas.height = height;
+            const ctx = canvas.getContext("2d");
+            ctx.drawImage(img, 0, 0, width, height);
+            
+            const compressedDataUrl = canvas.toDataURL("image/jpeg", quality);
+            resolve(compressedDataUrl);
+        };
+    });
+}
+
+const localMemoriesKey = "birthday_memories_backup";
+
+function saveLocalMemories(name, photo1, caption1, photo2, caption2) {
+    const backup = {
+        name,
+        photo1,
+        caption1,
+        photo2,
+        caption2,
+        createdAt: new Date().toISOString()
+    };
+    const current = localStorage.getItem(localMemoriesKey);
+    const list = current ? JSON.parse(current) : [];
+    list.unshift(backup);
+    localStorage.setItem(localMemoriesKey, JSON.stringify(list));
+}
 
 // -------------------------------------------------------------
 // Form Submission & Packaging Scene Trigger
@@ -206,7 +274,7 @@ const polaroidsOutput = document.getElementById("polaroids-output");
 const finalCta = document.getElementById("final-cta-container");
 const finishBtn = document.getElementById("finish-celebration-btn");
 
-memoriesForm.addEventListener("submit", (e) => {
+memoriesForm.addEventListener("submit", async (e) => {
     e.preventDefault();
     
     // Safety check - require both images uploaded
@@ -215,8 +283,43 @@ memoriesForm.addEventListener("submit", (e) => {
         return;
     }
 
+    const name = document.getElementById("sender-name").value.trim();
     const caption1 = document.getElementById("caption-1").value.trim();
     const caption2 = document.getElementById("caption-2").value.trim();
+    
+    if (!name) return;
+
+    // Change button text to indicate active loading
+    const packageBtn = document.getElementById("package-memories-btn");
+    packageBtn.disabled = true;
+    packageBtn.innerHTML = 'Memproses Kenangan... <i class="fa-solid fa-spinner fa-spin"></i>';
+
+    // Save name locally
+    localStorage.setItem("sender_name", name);
+
+    // Compress pictures client-side
+    const compressedImg1 = await compressImage(memoryImages[0]);
+    const compressedImg2 = await compressImage(memoryImages[1]);
+
+    // Save to Firebase
+    if (firestoreEnabled) {
+        try {
+            await addDoc(collection(db, "memories"), {
+                name: name,
+                photo1: compressedImg1,
+                caption1: caption1,
+                photo2: compressedImg2,
+                caption2: caption2,
+                createdAt: serverTimestamp()
+            });
+            console.log("Memories successfully uploaded to Firebase Firestore! 🌟");
+        } catch (error) {
+            console.error("Failed uploading memories to Firebase, saving to backup:", error);
+            saveLocalMemories(name, compressedImg1, caption1, compressedImg2, caption2);
+        }
+    } else {
+        saveLocalMemories(name, compressedImg1, caption1, compressedImg2, caption2);
+    }
 
     // Fade out form and display 3D Packaging scene
     formWrapper.style.opacity = 0;
@@ -224,28 +327,26 @@ memoriesForm.addEventListener("submit", (e) => {
         formWrapper.style.display = "none";
         packagingScene.style.display = "flex";
         
-        // Dynamically build the two polaroid items inside the scene
-        buildPolaroids(caption1, caption2);
+        // Dynamically build the two polaroid items inside the scene (using compressed images)
+        buildPolaroids(compressedImg1, compressedImg2, caption1, caption2);
         
         // Start packaging sequence
         runPackagingSequence();
     }, 500);
 });
 
-function buildPolaroids(cap1, cap2) {
+function buildPolaroids(img1, img2, cap1, cap2) {
     polaroidsOutput.innerHTML = `
         <div class="polaroid-card" id="output-card-1">
-            <img src="${memoryImages[0]}" alt="Memori 1">
+            <img src="${img1}" alt="Memori 1">
             <span class="polaroid-caption">${cap1}</span>
         </div>
         <div class="polaroid-card" id="output-card-2">
-            <img src="${memoryImages[1]}" alt="Memori 2">
+            <img src="${img2}" alt="Memori 2">
             <span class="polaroid-caption">${cap2}</span>
         </div>
     `;
 }
-
-// Controls 3D packaging, shaking, opening, and popup delays
 function runPackagingSequence() {
     // 1. Box shakes to pack/prepare pictures
     setTimeout(() => {
