@@ -1,0 +1,640 @@
+/* 22 YEARS OF FROST - Birthday Girl Dashboard Styling */
+:root {
+    /* Color Palette */
+    --dark-bg: #0d0506;
+    --dark-mid: #16080a;
+    --dark-light: #220f12;
+    
+    --rose-gold-light: #ffc4b5;
+    --rose-gold: #fda085;
+    --rose-gold-dark: #e0876f;
+    --gold: #e5c158;
+    
+    /* Neon Glo Colors */
+    --glow-gold: rgba(229, 193, 88, 0.35);
+    --glow-rose: rgba(253, 160, 133, 0.25);
+    --glow-red: rgba(255, 117, 140, 0.4);
+    
+    --text-primary: #f5e6e8;
+    --text-secondary: #cfa8ae;
+    --text-muted: #8e6c72;
+    
+    --glass-border: rgba(255, 255, 255, 0.04);
+    --glass-shadow: 0 15px 45px rgba(0, 0, 0, 0.6);
+}
+
+/* Reset and Base Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: var(--dark-bg);
+    background-image: radial-gradient(circle at center, var(--dark-mid) 0%, var(--dark-bg) 100%);
+    color: var(--text-primary);
+    min-height: 100vh;
+    overflow-y: auto;
+    position: relative;
+}
+
+/* Background Canvas */
+#particle-canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    pointer-events: none;
+}
+
+/* Glassmorphism System */
+.glass-card {
+    background: rgba(255, 255, 255, 0.015);
+    border: 1px solid var(--glass-border);
+    border-radius: 24px;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    box-shadow: var(--glass-shadow);
+    transition: all 0.5s cubic-bezier(0.165, 0.84, 0.44, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+.glass-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle at top right, rgba(253, 160, 133, 0.05) 0%, transparent 60%);
+    pointer-events: none;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+    width: 6px;
+}
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+::-webkit-scrollbar-thumb {
+    background: var(--dark-light);
+    border-radius: 10px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: var(--rose-gold-dark);
+}
+
+/* -------------------------------------------------------------
+ * LOCK SCREEN VIEW
+ * ------------------------------------------------------------- */
+.lock-screen-container {
+    width: 100%;
+    height: 100vh;
+    min-height: 650px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    z-index: 10;
+    padding: 2rem;
+}
+
+.lock-card {
+    max-width: 460px;
+    width: 100%;
+    padding: 3.5rem 2.5rem;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.sub-header {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    margin-bottom: 1.5rem;
+}
+
+.sub-header-text {
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.3em;
+    color: var(--rose-gold);
+    text-shadow: 0 0 10px var(--glow-rose);
+}
+
+.diamond-icon {
+    font-size: 0.65rem;
+    color: var(--rose-gold-light);
+    opacity: 0.8;
+}
+
+.lock-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2.75rem;
+    font-weight: 300;
+    line-height: 1.2;
+    margin-bottom: 0.5rem;
+    text-shadow: 0 0 20px rgba(253, 160, 133, 0.15);
+}
+
+.lock-subtitle {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    margin-bottom: 2rem;
+    font-weight: 300;
+}
+
+/* Error banner overlay */
+.error-banner {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.6rem;
+    width: 100%;
+    padding: 0.85rem 1.2rem;
+    border-radius: 12px;
+    background: rgba(255, 117, 140, 0.08);
+    border: 1px solid rgba(255, 117, 140, 0.25);
+    color: #ff9da9;
+    font-size: 0.85rem;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+    animation: fadeInUp 0.4s ease-out;
+}
+
+.error-banner i {
+    color: #ff758c;
+    text-shadow: 0 0 8px var(--glow-red);
+}
+
+/* PIN Dots Display */
+.pin-dots-container {
+    display: flex;
+    gap: 1.25rem;
+    margin-bottom: 2.5rem;
+    transition: transform 0.1s;
+}
+
+.pin-dots-container.shake-animation {
+    animation: shakeDots 0.5s ease;
+}
+
+.pin-dot {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    border: 2px solid rgba(255, 255, 255, 0.15);
+    background: rgba(0, 0, 0, 0.25);
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.pin-dot.filled {
+    border-color: var(--rose-gold);
+    background: linear-gradient(135deg, var(--rose-gold) 0%, var(--gold) 100%);
+    box-shadow: 0 0 15px var(--rose-gold), 0 0 8px var(--gold);
+    transform: scale(1.15);
+}
+
+.pin-dot.error-dot {
+    border-color: #ff758c;
+    background: #ff758c;
+    box-shadow: 0 0 15px #ff758c;
+}
+
+/* Digital Keypad styles */
+.keypad {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.1rem 1.5rem;
+    width: 100%;
+    max-width: 320px;
+}
+
+.key-btn {
+    width: 68px;
+    height: 68px;
+    margin: 0 auto;
+    border-radius: 50%;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    background: rgba(255, 255, 255, 0.01);
+    color: var(--text-primary);
+    font-size: 1.4rem;
+    font-weight: 500;
+    font-family: 'Inter', sans-serif;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.key-btn:hover {
+    background: rgba(255, 255, 255, 0.04);
+    border-color: rgba(253, 160, 133, 0.2);
+    color: var(--rose-gold-light);
+    transform: scale(1.05);
+    box-shadow: 0 6px 15px rgba(0,0,0,0.4), 0 0 10px var(--glow-rose);
+}
+
+.key-btn:active {
+    transform: scale(0.92);
+    background: rgba(253, 160, 133, 0.1);
+}
+
+.key-btn.action-key {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text-muted);
+}
+
+.key-btn.action-key:hover {
+    color: var(--rose-gold-light);
+}
+
+/* -------------------------------------------------------------
+ * DASHBOARD VIEW
+ * ------------------------------------------------------------- */
+.dashboard-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 3rem 5rem 3rem;
+    position: relative;
+    z-index: 10;
+}
+
+@media (max-width: 768px) {
+    .dashboard-container {
+        padding: 0 1.5rem 4rem 1.5rem;
+    }
+}
+
+/* Navbar */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 2rem 0;
+    border-bottom: 1px solid rgba(255, 117, 140, 0.08);
+    margin-bottom: 3.5rem;
+}
+
+.nav-branding {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.8rem;
+    font-weight: 400;
+    letter-spacing: 0.15em;
+    color: var(--rose-gold-light);
+    text-shadow: 0 0 10px var(--glow-rose);
+}
+
+@media (max-width: 500px) {
+    .nav-branding {
+        font-size: 1.35rem;
+    }
+}
+
+.navbar-actions {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+}
+
+.dashboard-music-btn {
+    background: transparent;
+    border: 1px solid var(--glass-border);
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 50%;
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: all 0.3s;
+}
+.dashboard-music-btn:hover {
+    color: var(--rose-gold);
+    border-color: var(--rose-gold);
+    box-shadow: 0 0 10px var(--glow-rose);
+}
+
+.dashboard-music-btn.playing i {
+    animation: rotateMusic 4s linear infinite;
+}
+
+.home-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    text-decoration: none;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+    border: 1px solid var(--glass-border);
+    padding: 0.6rem 1.2rem;
+    border-radius: 50px;
+    transition: all 0.3s;
+}
+
+.home-link:hover {
+    color: var(--rose-gold);
+    border-color: var(--rose-gold);
+    transform: translateY(-2px);
+    box-shadow: 0 0 10px var(--glow-rose);
+}
+
+/* Welcome Section */
+.welcome-section {
+    text-align: center;
+    margin-bottom: 4rem;
+    animation: fadeInUp 1.2s ease-out;
+}
+
+.welcome-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 4rem;
+    font-weight: 300;
+    line-height: 1.2;
+    margin-bottom: 1rem;
+    background: linear-gradient(135deg, var(--text-primary) 30%, var(--rose-gold) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-shadow: 0 0 25px rgba(253, 160, 133, 0.15);
+}
+
+@media (max-width: 600px) {
+    .welcome-title {
+        font-size: 2.75rem;
+    }
+}
+
+.welcome-desc {
+    font-size: 1.05rem;
+    color: var(--text-secondary);
+    max-width: 680px;
+    margin: 0 auto;
+    line-height: 1.7;
+    font-weight: 300;
+}
+
+/* Main Grid Boards */
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: 1.1fr 1.3fr 1fr;
+    gap: 2.5rem;
+    align-items: start;
+}
+
+@media (max-width: 1100px) {
+    .dashboard-grid {
+        grid-template-columns: 1fr;
+        gap: 3rem;
+    }
+}
+
+.grid-card {
+    padding: 2.5rem 2rem;
+}
+
+.panel-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.85rem;
+    font-weight: 400;
+    margin-bottom: 2rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    color: var(--text-primary);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+    padding-bottom: 0.75rem;
+}
+
+.panel-title i {
+    color: var(--rose-gold);
+    font-size: 1.35rem;
+}
+
+.panel-scroll {
+    max-height: 580px;
+    overflow-y: auto;
+    padding-right: 0.6rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+/* 1. Wishes inbox Cards */
+.wish-card {
+    background: rgba(255, 255, 255, 0.015);
+    border: 1px solid var(--glass-border);
+    border-radius: 16px;
+    padding: 1.5rem;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.wish-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 3px;
+    height: 100%;
+    background: linear-gradient(to bottom, var(--rose-gold), rgba(253, 160, 133, 0.15));
+}
+
+.wish-card:hover {
+    background: rgba(255, 255, 255, 0.03);
+    border-color: rgba(253, 160, 133, 0.18);
+    transform: translateX(3px);
+}
+
+.wish-card .message {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 1.25rem;
+    color: var(--text-primary);
+    margin-bottom: 0.85rem;
+    line-height: 1.5;
+}
+
+.wish-card .sender {
+    font-size: 0.85rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    color: var(--rose-gold);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.wish-card .timestamp {
+    position: absolute;
+    bottom: 1.5rem;
+    right: 1.5rem;
+    font-size: 0.7rem;
+    color: var(--text-muted);
+}
+
+/* 2. Memories Polaroid Wall Cards */
+.memory-card {
+    background: #ffffff;
+    border: 1px solid #e5dcde;
+    border-radius: 4px;
+    padding: 10px 10px 42px 10px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+    transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    cursor: pointer;
+}
+
+.memory-card::after {
+    content: '';
+    position: absolute;
+    top: -14px;
+    left: 50%;
+    transform: translateX(-50%) rotate(-3deg);
+    width: 60px;
+    height: 16px;
+    background: rgba(253, 160, 133, 0.35);
+    border: 1px dashed rgba(253, 160, 133, 0.5);
+}
+
+.memory-card:hover {
+    transform: scale(1.03) rotate(2deg);
+    box-shadow: 0 15px 35px rgba(0,0,0,0.7);
+    z-index: 100;
+}
+
+/* Alternate angles for dynamic polaroid wall feel */
+.memory-card:nth-child(even):hover {
+    transform: scale(1.03) rotate(-2deg);
+}
+
+.memory-card img {
+    width: 100%;
+    height: 220px;
+    object-fit: cover;
+    border: 1px solid rgba(0,0,0,0.1);
+}
+
+.memory-card .caption {
+    font-family: 'Caveat', cursive;
+    font-size: 1.35rem;
+    font-weight: 700;
+    color: #3c2a2d;
+    text-align: center;
+    margin-top: 8px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: block;
+}
+
+.memory-card .author {
+    font-family: 'Caveat', cursive;
+    font-size: 0.95rem;
+    color: var(--text-muted);
+    text-align: center;
+    margin-top: 2px;
+}
+
+/* 3. RSVP list cards */
+.rsvp-card-item {
+    background: rgba(255, 255, 255, 0.015);
+    border: 1px solid var(--glass-border);
+    border-radius: 16px;
+    padding: 1.15rem 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: all 0.3s;
+}
+
+.rsvp-card-item:hover {
+    background: rgba(255, 255, 255, 0.03);
+    border-color: rgba(255, 255, 255, 0.08);
+}
+
+.rsvp-name {
+    font-weight: 600;
+    font-size: 0.95rem;
+    color: var(--text-primary);
+}
+
+.rsvp-badge {
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 0.45rem 1rem;
+    border-radius: 50px;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+}
+
+.rsvp-badge.attending {
+    background: rgba(229, 193, 88, 0.08);
+    border: 1px solid rgba(229, 193, 88, 0.35);
+    color: var(--gold);
+    box-shadow: 0 0 10px rgba(229, 193, 88, 0.08);
+}
+
+.rsvp-badge.declined {
+    background: rgba(142, 108, 114, 0.08);
+    border: 1px solid rgba(142, 108, 114, 0.3);
+    color: var(--text-muted);
+}
+
+/* Loading & Empty states */
+.loading-state, .empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 4rem 1rem;
+    color: var(--text-muted);
+    gap: 0.75rem;
+    text-align: center;
+}
+
+.loading-state i {
+    font-size: 1.5rem;
+    color: var(--rose-gold);
+}
+
+.empty-state i {
+    font-size: 2rem;
+    opacity: 0.5;
+}
+
+/* Animations */
+@keyframes rotateMusic {
+    100% { transform: rotate(360deg); }
+}
+
+@keyframes fadeInDown {
+    from { opacity: 0; transform: translateY(-25px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes shakeDots {
+    0%, 100% { transform: translateX(0); }
+    20%, 60% { transform: translateX(-8px); }
+    40%, 80% { transform: translateX(8px); }
+}

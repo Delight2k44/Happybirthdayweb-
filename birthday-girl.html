@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Birthday Girl Universe ✦ 22 YEARS OF FROST</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,400&family=Inter:wght@300;400;600&family=Caveat:wght@400;700&display=swap" rel="stylesheet">
+    
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Canvas Confetti Library -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="birthday-girl.css">
+</head>
+<body>
+    <!-- Canvas for Colorful Celebratory Background -->
+    <canvas id="particle-canvas"></canvas>
+
+    <!-- Background Music -->
+    <audio id="bg-music" loop>
+        <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+    </audio>
+
+    <!-- Floating Audio Control -->
+    <button id="music-toggle" class="music-btn" aria-label="Toggle Music" style="display: none;">
+        <i class="fas fa-music"></i>
+    </button>
+
+    <!-- ==========================================
+         VERIFICATION SECTION (Lock Screen)
+         ========================================== -->
+    <div class="lock-screen-container" id="lock-screen-view">
+        <main class="lock-card glass-card">
+            <!-- Header Ornament -->
+            <div class="sub-header">
+                <span class="diamond-icon">✦</span>
+                <span class="sub-header-text">PRIVATE ACCESS ONLY</span>
+                <span class="diamond-icon">✦</span>
+            </div>
+
+            <h1 class="lock-title">Unlock Your Magic Box</h1>
+            <p class="lock-subtitle">Enter the secret digital birthday pin code (6 digits)</p>
+
+            <!-- Error Notification Banner -->
+            <div class="error-banner" id="error-banner" style="display: none;">
+                <i class="fa-solid fa-triangle-exclamation"></i> 
+                <span id="error-text">Incorrect PIN! 3 attempts remaining.</span>
+            </div>
+
+            <!-- PIN Display Dots -->
+            <div class="pin-dots-container" id="pin-dots-container">
+                <span class="pin-dot"></span>
+                <span class="pin-dot"></span>
+                <span class="pin-dot"></span>
+                <span class="pin-dot"></span>
+                <span class="pin-dot"></span>
+                <span class="pin-dot"></span>
+            </div>
+
+            <!-- On-Screen Digital Keypad -->
+            <div class="keypad">
+                <button class="key-btn" data-value="1">1</button>
+                <button class="key-btn" data-value="2">2</button>
+                <button class="key-btn" data-value="3">3</button>
+                <button class="key-btn" data-value="4">4</button>
+                <button class="key-btn" data-value="5">5</button>
+                <button class="key-btn" data-value="6">6</button>
+                <button class="key-btn" data-value="7">7</button>
+                <button class="key-btn" data-value="8">8</button>
+                <button class="key-btn" data-value="9">9</button>
+                <button class="key-btn action-key" data-value="clear">C</button>
+                <button class="key-btn" data-value="0">0</button>
+                <button class="key-btn action-key" data-value="delete">
+                    <i class="fa-solid fa-delete-left"></i>
+                </button>
+            </div>
+        </main>
+    </div>
+
+    <!-- ==========================================
+         DASHBOARD SECTION (Unlocked Universe)
+         ========================================== -->
+    <div class="dashboard-container" id="dashboard-view" style="display: none;">
+        <!-- Top Navbar -->
+        <header class="navbar">
+            <h2 class="nav-branding">✦ Birthday Girl Dashboard ✦</h2>
+            <div class="navbar-actions">
+                <button id="nav-music-toggle" class="dashboard-music-btn">
+                    <i class="fa-solid fa-music"></i>
+                </button>
+                <a href="index.html" class="home-link"><i class="fa-solid fa-house"></i> Home</a>
+            </div>
+        </header>
+
+        <!-- Greeting Card -->
+        <section class="welcome-section">
+            <h1 class="welcome-title">Happy Birthday, Dearest Niece! 🎂✨</h1>
+            <p class="welcome-desc">Welcome to your personal secret universe. Your friends and family have left beautiful wishes and memories just for you. Explore them below!</p>
+        </section>
+
+        <!-- Main Dashboard Content Grid -->
+        <main class="dashboard-grid">
+            
+            <!-- Column 1: Wishes Wall -->
+            <section class="grid-card wishes-panel glass-card">
+                <h2 class="panel-title"><i class="fa-solid fa-envelope-open-text"></i> Warm Wishes Wall</h2>
+                <div class="panel-scroll" id="dashboard-wishes-list">
+                    <div class="loading-state">
+                        <i class="fa-solid fa-spinner fa-spin"></i>
+                        <p>Loading wishes...</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Column 2: Memory polaroids list -->
+            <section class="grid-card memories-panel glass-card">
+                <h2 class="panel-title"><i class="fa-solid fa-images"></i> Shared Memory Lane</h2>
+                <div class="panel-scroll" id="dashboard-memories-list">
+                    <div class="loading-state">
+                        <i class="fa-solid fa-spinner fa-spin"></i>
+                        <p>Loading memories...</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Column 3: RSVPs list -->
+            <section class="grid-card rsvps-panel glass-card">
+                <h2 class="panel-title"><i class="fa-solid fa-clipboard-user"></i> Guest Attendance (RSVP)</h2>
+                <div class="panel-scroll" id="dashboard-rsvp-list">
+                    <div class="loading-state">
+                        <i class="fa-solid fa-spinner fa-spin"></i>
+                        <p>Loading guest list...</p>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <!-- Firebase configuration & app scripts -->
+    <script type="importmap">
+      {
+        "imports": {
+          "firebase/app": "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js",
+          "firebase/analytics": "https://www.gstatic.com/firebasejs/10.8.0/firebase-analytics.js",
+          "firebase/firestore": "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js"
+        }
+      }
+    </script>
+    <script type="module" src="birthday-girl.js"></script>
+</body>
+</html>
