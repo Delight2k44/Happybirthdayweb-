@@ -230,7 +230,7 @@ function validatePasscode() {
 const lockView = document.getElementById("lock-screen-view");
 const welcomeLettersView = document.getElementById("welcome-letters-view");
 const dashboardView = document.getElementById("dashboard-view");
-const musicBtn = document.getElementById("music-toggle");
+
 
 const personalEnvelope = document.getElementById("personal-envelope");
 const personalLetter = document.getElementById("personal-letter");
@@ -288,10 +288,6 @@ function unlockDashboard() {
         setTimeout(() => {
             welcomeLettersView.style.opacity = 1;
         }, 50);
-
-        // Enable music control
-        musicBtn.style.display = "flex";
-        playMusic();
         
         // 3. Load dynamic signatures list of friends' names from Firestore
         loadFriendsSignatures();
@@ -702,9 +698,6 @@ let wishesCycleInterval = null;
 let currentWishIndex = 0;
 
 enterCelebrationBtn.addEventListener("click", () => {
-    // Stop standard dashboard music
-    pauseMusic();
-    
     // Switch views
     dashboardView.style.opacity = 0;
     setTimeout(() => {
@@ -718,6 +711,8 @@ enterCelebrationBtn.addEventListener("click", () => {
         
         // Start interactive loops
         startCelebrationRoomLoops();
+        // Play custom song immediately in a loop (since candles start lit!)
+        playBirthdaySong();
     }, 500);
 });
 
@@ -750,13 +745,18 @@ leaveCelebrationBtn.addEventListener("click", () => {
 // Play/Pause song in celebration room
 celebrationMusicToggle.addEventListener("click", () => {
     if (birthdaySong.paused) {
-        birthdaySong.play();
-        celebrationMusicToggle.classList.add("playing");
+        playBirthdaySong();
     } else {
         birthdaySong.pause();
         celebrationMusicToggle.classList.remove("playing");
     }
 });
+
+function playBirthdaySong() {
+    birthdaySong.play().then(() => {
+        celebrationMusicToggle.classList.add("playing");
+    }).catch(e => console.warn("Song blocked until user interacted", e));
+}
 
 function startCelebrationRoomLoops() {
     // 1. Build background floating photos collage
@@ -779,6 +779,10 @@ let cakeBlown = false;
 cakeAssembly.addEventListener("click", () => {
     if (!cakeBlown) {
         blowOutCandles();
+    } else {
+        // Click again to re-light the candles and start the song back up!
+        resetCakeCandles();
+        playBirthdaySong();
     }
 });
 
@@ -792,10 +796,9 @@ function blowOutCandles() {
     cakeInstructionTitle.textContent = "Candles Blown! 🌟";
     cakeInstructionDesc.textContent = "Happy Birthday, Frost! Enjoy your special day! 💖";
 
-    // Play Upbeat Happy Birthday song
-    birthdaySong.play().then(() => {
-        celebrationMusicToggle.classList.add("playing");
-    }).catch(e => console.warn("Song blocked until user interacted", e));
+    // Pause the song when candles are blown out (turned off)!
+    birthdaySong.pause();
+    celebrationMusicToggle.classList.remove("playing");
 
     // Massive screen-wide confetti shower loops
     const end = Date.now() + (8 * 1000);

@@ -92,37 +92,7 @@ function animateParticles() {
 // Start animations
 animateParticles();
 
-// -------------------------------------------------------------
-// Background Music Control
-// -------------------------------------------------------------
-const bgMusic = document.getElementById("bg-music");
-const musicToggle = document.getElementById("music-toggle");
-let isPlaying = false;
 
-function playMusic() {
-    bgMusic.play().then(() => {
-        isPlaying = true;
-        musicToggle.classList.add("playing");
-        musicToggle.innerHTML = '<i class="fas fa-pause"></i>';
-    }).catch(err => {
-        console.log("Autoplay was prevented by browser. Click the music button to start.", err);
-    });
-}
-
-function pauseMusic() {
-    bgMusic.pause();
-    isPlaying = false;
-    musicToggle.classList.remove("playing");
-    musicToggle.innerHTML = '<i class="fas fa-music"></i>';
-}
-
-musicToggle.addEventListener("click", () => {
-    if (isPlaying) {
-        pauseMusic();
-    } else {
-        playMusic();
-    }
-});
 
 // -------------------------------------------------------------
 // Live Countdown Logic
