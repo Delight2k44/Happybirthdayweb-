@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Happy Birthday! 🎈</title>
+    <title>22 YEARS OF FROST ✦ Welcoming Page</title>
     
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,400&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
     
     <!-- FontAwesome for Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -20,10 +20,12 @@
     <link rel="stylesheet" href="index.css">
 </head>
 <body>
-    <!-- Background Music (Audio Element) -->
+    <!-- Canvas for Floating Ambient Particles -->
+    <canvas id="particle-canvas"></canvas>
+
+    <!-- Background Music -->
     <audio id="bg-music" loop>
         <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
-        <!-- You can replace this link with a sweet birthday song later -->
     </audio>
 
     <!-- Floating Audio Control -->
@@ -31,122 +33,60 @@
         <i class="fas fa-music"></i>
     </button>
 
-    <!-- Hero / Celebration Section -->
-    <header class="hero">
-        <div class="hero-overlay"></div>
-        <div class="container hero-content">
-            <span class="pre-title">HAPPY BIRTHDAY TO OUR DEAREST</span>
-            <h1 class="niece-name">Niece ❤️</h1>
-            <p class="hero-subtitle">Wishing you a day filled with laughter, love, and endless joy! Click below to open your special birthday card.</p>
-            
-            <button id="open-card-btn" class="btn btn-primary">
-                Open Birthday Card <i class="fas fa-gift"></i>
-            </button>
-        </div>
-        
-        <div class="scroll-indicator">
-            <span>Scroll down to see memories</span>
-            <i class="fas fa-chevron-down"></i>
-        </div>
-    </header>
+    <!-- Welcoming / Countdown Container -->
+    <div class="welcome-container">
+        <main class="content-wrapper">
+            <!-- Top Sub-header -->
+            <div class="sub-header">
+                <span class="diamond-icon">✦</span>
+                <span class="sub-header-text">22 YEARS OF FROST</span>
+                <span class="diamond-icon">✦</span>
+            </div>
 
-    <!-- Interactive Birthday Card Modal/Popup -->
-    <div id="card-modal" class="modal">
-        <div class="modal-content card-container">
-            <button class="close-modal">&times;</button>
-            <div class="birthday-card">
-                <div class="card-cover">
-                    <h3>Tap to Open 💖</h3>
+            <!-- Main Title & Welcoming Message -->
+            <div class="title-group">
+                <h1 class="main-title">Her Special Day <span class="italic-subtitle">is Coming</span></h1>
+                <p class="welcome-caption">"The People we meet become part of our story" 💖</p>
+            </div>
+
+            <!-- Glassmorphic Countdown Timer -->
+            <div class="countdown-container">
+                <!-- Days Card -->
+                <div class="countdown-card">
+                    <span class="time-number" id="days">00</span>
+                    <span class="time-label">HARI</span>
                 </div>
-                <div class="card-inside">
-                    <h2>Dearest Niece,</h2>
-                    <p>May this year bring you closer to all your dreams. You deserve the best that life has to offer, and we are so proud of the wonderful person you are becoming.</p>
-                    <p class="signature">With love, <br>Your Family</p>
+                <!-- Hours Card -->
+                <div class="countdown-card">
+                    <span class="time-number" id="hours">00</span>
+                    <span class="time-label">JAM</span>
+                </div>
+                <!-- Minutes Card -->
+                <div class="countdown-card">
+                    <span class="time-number" id="minutes">00</span>
+                    <span class="time-label">MENIT</span>
+                </div>
+                <!-- Seconds Card -->
+                <div class="countdown-card">
+                    <span class="time-number" id="seconds">00</span>
+                    <span class="time-label">DETIK</span>
                 </div>
             </div>
-        </div>
+
+            <!-- Bottom Status Indicator & Locked Button -->
+            <div class="action-group">
+                <p class="status-indicator" id="status-text">
+                    <i class="fa-solid fa-hourglass-half"></i> Beberapa detik lagi... 💖
+                </p>
+                
+                <button id="unlocked-action-btn" class="locked-btn" disabled>
+                    <i class="fa-solid fa-lock" id="btn-lock-icon"></i> 
+                    <span id="btn-text">TUNGGU SAMPAI WAKTUNYA</span> 
+                    <i class="fa-regular fa-bell" id="btn-bell-icon"></i>
+                </button>
+            </div>
+        </main>
     </div>
-
-    <!-- Main Content Section -->
-    <main>
-        <!-- Memory Lane / Photo Gallery -->
-        <section id="gallery" class="gallery-section">
-            <div class="container">
-                <h2 class="section-title">Memory Lane 📸</h2>
-                <p class="section-subtitle">A collection of beautiful moments together. (Upload your pictures to the <code>images/</code> folder to display them here!)</p>
-                
-                <!-- Pictures Grid -->
-                <div class="gallery-grid" id="gallery-grid">
-                    <!-- Placeholder cards before pictures are uploaded -->
-                    <div class="gallery-item">
-                        <div class="img-placeholder">
-                            <i class="fas fa-image"></i>
-                            <p>Photo 1</p>
-                        </div>
-                        <div class="gallery-caption">Your First Memory</div>
-                    </div>
-                    <div class="gallery-item">
-                        <div class="img-placeholder">
-                            <i class="fas fa-image"></i>
-                            <p>Photo 2</p>
-                        </div>
-                        <div class="gallery-caption">A Special Moment</div>
-                    </div>
-                    <div class="gallery-item">
-                        <div class="img-placeholder">
-                            <i class="fas fa-image"></i>
-                            <p>Photo 3</p>
-                        </div>
-                        <div class="gallery-caption">Happy Times</div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Wishes Board (Firebase Connected) -->
-        <section id="wishes" class="wishes-section">
-            <div class="container">
-                <h2 class="section-title">Leave a Wish 🌟</h2>
-                <p class="section-subtitle">Write a lovely message to celebrate her special day!</p>
-                
-                <div class="wishes-layout">
-                    <!-- Submit a Wish Form -->
-                    <div class="wish-form-container">
-                        <form id="wish-form" class="wish-form">
-                            <div class="form-group">
-                                <label for="sender-name">Your Name</label>
-                                <input type="text" id="sender-name" required placeholder="e.g., Uncle John">
-                            </div>
-                            <div class="form-group">
-                                <label for="wish-message">Your Wish</label>
-                                <textarea id="wish-message" required placeholder="Write your heartfelt message here..."></textarea>
-                            </div>
-                            <button type="submit" class="btn btn-secondary">Send Wish ✨</button>
-                        </form>
-                    </div>
-
-                    <!-- Wishes Display Board -->
-                    <div class="wishes-board">
-                        <h3>Wishes Board</h3>
-                        <div class="wishes-list" id="wishes-list">
-                            <!-- Wishes will populate dynamically from Firebase -->
-                            <div class="wish-card loading">
-                                <p>Loading wishes...</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-    </main>
-
-    <!-- Footer -->
-    <footer>
-        <div class="container text-center">
-            <p>Made with ❤️ for a wonderful Niece</p>
-            <p>&copy; 2026. All rights reserved.</p>
-        </div>
-    </footer>
 
     <!-- Firebase configuration & app scripts -->
     <script type="importmap">

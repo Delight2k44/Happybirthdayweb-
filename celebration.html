@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Birthday! 💖</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,400&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Canvas Confetti -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+    <style>
+        :root {
+            --dark-bg: #0d0506;
+            --rose-gold: #fda085;
+            --warm-glow: rgba(253, 160, 133, 0.15);
+            --glass-bg: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(255, 255, 255, 0.06);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--dark-bg);
+            background-image: radial-gradient(circle at center, #1e0e11 0%, #0d0506 100%);
+            color: #f7e8ea;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            text-align: center;
+        }
+
+        /* Ambient Bokeh Background */
+        #bokeh-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .container {
+            position: relative;
+            z-index: 2;
+            padding: 2rem;
+            max-width: 600px;
+            width: 100%;
+        }
+
+        .card {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 4rem 2rem;
+            backdrop-filter: blur(15px);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5), 
+                        0 0 40px var(--warm-glow);
+            animation: fadeIn 1.5s ease-out;
+        }
+
+        .star-icon {
+            font-size: 1.5rem;
+            color: var(--rose-gold);
+            text-shadow: 0 0 10px var(--rose-gold);
+            margin-bottom: 1.5rem;
+            display: inline-block;
+            animation: spin 6s linear infinite;
+        }
+
+        h1 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 3.5rem;
+            font-weight: 400;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #f7e8ea 30%, var(--rose-gold) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 20px rgba(253, 160, 133, 0.2);
+        }
+
+        p {
+            font-size: 1.15rem;
+            color: #bfaab0;
+            margin-bottom: 2rem;
+            line-height: 1.8;
+        }
+
+        .heart-icon {
+            color: #ff758c;
+            animation: pulse 1.5s infinite;
+            display: inline-block;
+        }
+
+        .under-construction {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(253, 160, 133, 0.1);
+            border: 1px dashed rgba(253, 160, 133, 0.3);
+            padding: 0.5rem 1.2rem;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--rose-gold);
+            margin-top: 1rem;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes spin {
+            100% { transform: rotate(360deg); }
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+    </style>
+</head>
+<body>
+    <canvas id="bokeh-canvas"></canvas>
+    
+    <div class="container">
+        <div class="card">
+            <span class="star-icon"><i class="fa-regular fa-star"></i></span>
+            <h1>Selamat Ulang Tahun!</h1>
+            <p>Welcome to the birthday girl's personal universe. We are currently decorating this space with her favorite memories, secret messages, and surprises. <br>Stay tuned! <span class="heart-icon">💖</span></p>
+            
+            <div class="under-construction">
+                <i class="fa-solid fa-wand-magic-sparkles"></i> Magic under construction
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Floating particles on canvas
+        const canvas = document.getElementById('bokeh-canvas');
+        const ctx = canvas.getContext('2d');
+        
+        let width = canvas.width = window.innerWidth;
+        let height = canvas.height = window.innerHeight;
+        
+        window.addEventListener('resize', () => {
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = window.innerHeight;
+        });
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * width;
+                this.y = Math.random() * height;
+                this.size = Math.random() * 8 + 2;
+                this.speedX = Math.random() * 0.4 - 0.2;
+                this.speedY = Math.random() * 0.3 - 0.5; // slow upward movement
+                this.opacity = Math.random() * 0.5 + 0.1;
+            }
+
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+
+                if (this.y < -10) this.y = height + 10;
+                if (this.x < -10 || this.x > width + 10) this.x = Math.random() * width;
+            }
+
+            draw() {
+                ctx.fillStyle = `rgba(253, 160, 133, ${this.opacity})`;
+                ctx.shadowBlur = this.size * 2;
+                ctx.shadowColor = '#fda085';
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        const particles = Array.from({ length: 40 }, () => new Particle());
+
+        function animate() {
+            ctx.clearRect(0, 0, width, height);
+            ctx.shadowBlur = 0; // reset
+            
+            particles.forEach(p => {
+                p.update();
+                p.draw();
+            });
+            requestAnimationFrame(animate);
+        }
+
+        animate();
+
+        // Trigger welcome confetti burst
+        document.addEventListener('DOMContentLoaded', () => {
+            confetti({
+                particleCount: 100,
+                spread: 70,
+                origin: { y: 0.6 },
+                colors: ['#fda085', '#ff758c', '#ffffff']
+            });
+        });
+    </script>
+</body>
+</html>

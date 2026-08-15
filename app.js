@@ -1,17 +1,8 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
-import { 
-    getFirestore, 
-    collection, 
-    addDoc, 
-    onSnapshot, 
-    query, 
-    orderBy, 
-    serverTimestamp 
-} from "firebase/firestore";
 
-// Your web app's Firebase configuration
+// Your web app's Firebase configuration (saved for later use)
 const firebaseConfig = {
   apiKey: "AIzaSyBenytTRI-15x8wAUuAvkedbw535xUUt-s",
   authDomain: "happy-birthday-ff3ad.firebaseapp.com",
@@ -25,102 +16,97 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
-
-// Initialize Firestore with fallback support
-let db;
-let firestoreEnabled = false;
-
-try {
-    db = getFirestore(app);
-    firestoreEnabled = true;
-    console.log("Firebase Firestore initialized successfully! 🎉");
-} catch (error) {
-    console.warn("Firestore initialization failed. Using LocalStorage fallback.", error);
-}
+console.log("Firebase initialized successfully! 🚀");
 
 // -------------------------------------------------------------
-// Photo Gallery Configuration
+// HTML5 Canvas - Ambient Floating Particles (Bokeh Effect)
 // -------------------------------------------------------------
-// Once you add photos to the "images" folder, add their filenames to this array.
-// Example: const niecePhotos = ["images/birthday_cake.jpg", "images/baby_pic.jpg"];
-const niecePhotos = [
-    // "images/photo1.jpg",
-    // "images/photo2.jpg",
-];
+const canvas = document.getElementById("particle-canvas");
+const ctx = canvas.getContext("2d");
 
-// Initialize Gallery UI
-const galleryGrid = document.getElementById("gallery-grid");
+let width = canvas.width = window.innerWidth;
+let height = canvas.height = window.innerHeight;
 
-function loadGallery() {
-    if (niecePhotos.length > 0) {
-        galleryGrid.innerHTML = ""; // Clear placeholders
-        niecePhotos.forEach((photoUrl, index) => {
-            const item = document.createElement("div");
-            item.className = "gallery-item";
-            item.innerHTML = `
-                <img src="${photoUrl}" alt="Niece memory ${index + 1}" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1530103862676-de8c9debad1d?auto=format&fit=crop&q=80&w=600';">
-                <div class="gallery-caption">Memory #${index + 1}</div>
-            `;
-            galleryGrid.appendChild(item);
-        });
+// Re-adjust on resize
+window.addEventListener("resize", () => {
+    width = canvas.width = window.innerWidth;
+    height = canvas.height = window.innerHeight;
+});
+
+class Particle {
+    constructor() {
+        this.reset();
+        // distribute initially across the screen
+        this.y = Math.random() * height;
+    }
+
+    reset() {
+        this.x = Math.random() * width;
+        this.y = height + Math.random() * 20;
+        this.size = Math.random() * 6 + 2;
+        this.speedX = Math.random() * 0.4 - 0.2;
+        this.speedY = -(Math.random() * 0.4 + 0.1); // Slow upward float
+        this.opacity = Math.random() * 0.4 + 0.1;
+        this.fadeSpeed = Math.random() * 0.005 + 0.002;
+    }
+
+    update() {
+        this.x += this.speedX;
+        this.y += this.speedY;
+
+        // fade out near the top
+        if (this.y < height * 0.2) {
+            this.opacity -= this.fadeSpeed;
+        }
+
+        if (this.y < -10 || this.opacity <= 0 || this.x < -10 || this.x > width + 10) {
+            this.reset();
+        }
+    }
+
+    draw() {
+        ctx.fillStyle = `rgba(253, 160, 133, ${this.opacity})`;
+        ctx.shadowBlur = this.size * 2.5;
+        ctx.shadowColor = "#fda085";
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        ctx.fill();
     }
 }
 
-// -------------------------------------------------------------
-// Interactive Birthday Card Modal
-// -------------------------------------------------------------
-const openCardBtn = document.getElementById("open-card-btn");
-const cardModal = document.getElementById("card-modal");
-const closeModal = document.querySelector(".close-modal");
-const birthdayCard = document.querySelector(".birthday-card");
+// Generate particle collection
+const particleCount = 45;
+const particles = Array.from({ length: particleCount }, () => new Particle());
 
-openCardBtn.addEventListener("click", () => {
-    cardModal.style.display = "flex";
-    triggerConfettiExplosion();
-});
-
-closeModal.addEventListener("click", () => {
-    cardModal.style.display = "none";
-    birthdayCard.classList.remove("open");
-});
-
-// Click outside modal to close
-window.addEventListener("click", (e) => {
-    if (e.target === cardModal) {
-        cardModal.style.display = "none";
-        birthdayCard.classList.remove("open");
-    }
-});
-
-// Flip/Open the cover when clicked
-birthdayCard.addEventListener("click", (e) => {
-    // Avoid toggling when closing the modal
-    if (e.target.closest(".close-modal")) return;
+function animateParticles() {
+    ctx.clearRect(0, 0, width, height);
+    ctx.shadowBlur = 0; // reset shadow for performance before clearing
     
-    birthdayCard.classList.toggle("open");
-    if (birthdayCard.classList.contains("open")) {
-        triggerHeartsConfetti();
-        playMusic();
-    }
-});
+    particles.forEach(p => {
+        p.update();
+        p.draw();
+    });
+    requestAnimationFrame(animateParticles);
+}
+
+// Start animations
+animateParticles();
 
 // -------------------------------------------------------------
-// Music Controls
+// Background Music Control
 // -------------------------------------------------------------
 const bgMusic = document.getElementById("bg-music");
 const musicToggle = document.getElementById("music-toggle");
 let isPlaying = false;
 
 function playMusic() {
-    if (!isPlaying) {
-        bgMusic.play().then(() => {
-            isPlaying = true;
-            musicToggle.classList.add("playing");
-            musicToggle.innerHTML = '<i class="fas fa-pause"></i>';
-        }).catch(err => {
-            console.log("Autoplay was prevented. Click the music button to play.", err);
-        });
-    }
+    bgMusic.play().then(() => {
+        isPlaying = true;
+        musicToggle.classList.add("playing");
+        musicToggle.innerHTML = '<i class="fas fa-pause"></i>';
+    }).catch(err => {
+        console.log("Autoplay was prevented by browser. Click the music button to start.", err);
+    });
 }
 
 function pauseMusic() {
@@ -139,176 +125,146 @@ musicToggle.addEventListener("click", () => {
 });
 
 // -------------------------------------------------------------
-// Confetti Celebrations (canvas-confetti)
+// Live Countdown Logic
 // -------------------------------------------------------------
-function triggerConfettiExplosion() {
-    confetti({
-        particleCount: 150,
-        spread: 80,
-        origin: { y: 0.6 },
-        colors: ['#ff758c', '#ff7eb3', '#fda085', '#e5c158', '#ffffff']
-    });
+// Target date: August 16, 2026 at 00:00:00 Local Time
+const targetDateString = "2026-08-16T00:00:00";
+const targetDate = new Date(targetDateString).getTime();
+
+const daysEl = document.getElementById("days");
+const hoursEl = document.getElementById("hours");
+const minutesEl = document.getElementById("minutes");
+const secondsEl = document.getElementById("seconds");
+
+const statusText = document.getElementById("status-text");
+const actionBtn = document.getElementById("unlocked-action-btn");
+const btnLockIcon = document.getElementById("btn-lock-icon");
+const btnText = document.getElementById("btn-text");
+
+let countdownInterval;
+let confettiInterval;
+
+function startCountdown() {
+    updateTimer(); // Initial call
+    countdownInterval = setInterval(updateTimer, 1000);
 }
 
-function triggerHeartsConfetti() {
-    const defaults = { spread: 360, ticks: 100, gravity: 0.5, decay: 0.94, startVelocity: 30, colors: ['#ff758c', '#ff7eb3', '#ff85a1'] };
+function updateTimer() {
+    const now = new Date().getTime();
+    const distance = targetDate - now;
 
-    function shoot() {
-        confetti({
-            ...defaults,
-            particleCount: 40,
-            scalar: 1.2,
-            shapes: ['heart'] // canvas-confetti supports shape elements or custom plugins, if not standard fallback works.
-        });
-
-        confetti({
-            ...defaults,
-            particleCount: 20,
-            scalar: 0.75
-        });
-    }
-
-    setTimeout(shoot, 0);
-    setTimeout(shoot, 100);
-    setTimeout(shoot, 200);
-}
-
-// -------------------------------------------------------------
-// Wishes Board (Firebase / LocalStorage Sync)
-// -------------------------------------------------------------
-const wishForm = document.getElementById("wish-form");
-const wishesList = document.getElementById("wishes-list");
-const localWishesKey = "birthday_wishes_backup";
-
-// Format date nicely
-function formatDate(timestamp) {
-    if (!timestamp) return "Just now";
-    const date = timestamp.toDate ? timestamp.toDate() : new Date(timestamp);
-    return date.toLocaleDateString('en-US', {
-        month: 'short',
-        day: 'numeric',
-        hour: '2-digit',
-        minute: '2-digit'
-    });
-}
-
-// Create a wish card element
-function createWishCard(name, message, timeString) {
-    const card = document.createElement("div");
-    card.className = "wish-card";
-    card.innerHTML = `
-        <p class="message">"${message}"</p>
-        <div class="sender">
-            <i class="fas fa-heart"></i> ${name}
-        </div>
-        <div class="timestamp">${timeString}</div>
-    `;
-    return card;
-}
-
-// Display Wishes in the UI
-function displayWishes(wishes) {
-    wishesList.innerHTML = "";
-    if (wishes.length === 0) {
-        wishesList.innerHTML = `
-            <div class="wish-card loading">
-                <p>No wishes yet. Be the first to leave one! ✨</p>
-            </div>
-        `;
+    if (distance <= 0) {
+        // Countdown finished!
+        clearInterval(countdownInterval);
+        handleCountdownExpiry();
         return;
     }
-    wishes.forEach(wish => {
-        const timeString = formatDate(wish.createdAt);
-        const card = createWishCard(wish.name, wish.message, timeString);
-        wishesList.appendChild(card);
+
+    // Time calculations
+    const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+    const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+    // Render output padded with leading zeros
+    daysEl.textContent = String(days).padStart(2, '0');
+    hoursEl.textContent = String(hours).padStart(2, '0');
+    minutesEl.textContent = String(minutes).padStart(2, '0');
+    secondsEl.textContent = String(seconds).padStart(2, '0');
+}
+
+// Unlocks the interactive elements when countdown hits 0
+function handleCountdownExpiry() {
+    // 1. Force zero displays
+    daysEl.textContent = "00";
+    hoursEl.textContent = "00";
+    minutesEl.textContent = "00";
+    secondsEl.textContent = "00";
+
+    // 2. Update status label
+    statusText.innerHTML = `<i class="fa-solid fa-cake-candles" style="color: #ff758c; animation: pulse 1.2s infinite;"></i> Waktunya telah tiba! Selamat Ulang Tahun! 💖`;
+    statusText.style.color = "#fda085";
+
+    // 3. Unlock action button
+    actionBtn.disabled = false;
+    actionBtn.classList.add("unlocked");
+    
+    // Change lock icon to open lock
+    btnLockIcon.className = "fa-solid fa-lock-open";
+    btnLockIcon.style.color = "#fda085";
+    
+    // Change button text
+    btnText.textContent = "MASUK KE PESTA 🎈";
+
+    // 4. Trigger celebration effects
+    triggerContinuousCelebration();
+}
+
+// -------------------------------------------------------------
+// Confetti & Celebration Effects
+// -------------------------------------------------------------
+function triggerSingleBurst() {
+    confetti({
+        particleCount: 100,
+        spread: 80,
+        origin: { y: 0.6 },
+        colors: ['#fda085', '#ff758c', '#ffc4b5', '#ffffff']
     });
 }
 
-// Fetch Wishes from LocalStorage
-function getLocalWishes() {
-    const raw = localStorage.getItem(localWishesKey);
-    return raw ? JSON.parse(raw) : [];
-}
+function triggerContinuousCelebration() {
+    // Basic burst on unlock
+    triggerSingleBurst();
 
-// Save Wish to LocalStorage
-function saveLocalWish(name, message) {
-    const wishes = getLocalWishes();
-    const newWish = {
-        name,
-        message,
-        createdAt: new Date().toISOString()
-    };
-    wishes.unshift(newWish); // Newest first
-    localStorage.setItem(localWishesKey, JSON.stringify(wishes));
-    return wishes;
-}
-
-// Bind Wishes Stream (Firebase or Fallback)
-if (firestoreEnabled) {
-    try {
-        const wishesRef = collection(db, "wishes");
-        const q = query(wishesRef, orderBy("createdAt", "desc"));
-        
-        onSnapshot(q, (snapshot) => {
-            const wishes = [];
-            snapshot.forEach((doc) => {
-                wishes.push(doc.data());
-            });
-            displayWishes(wishes);
-        }, (error) => {
-            console.error("Firebase Read Error, using LocalStorage fallback:", error);
-            displayWishes(getLocalWishes());
-        });
-    } catch (e) {
-        console.error("Error setting up Firebase stream, using LocalStorage fallback:", e);
-        displayWishes(getLocalWishes());
-    }
-} else {
-    displayWishes(getLocalWishes());
-}
-
-// Handle Form Submission
-wishForm.addEventListener("submit", async (e) => {
-    e.preventDefault();
-    const nameInput = document.getElementById("sender-name");
-    const messageInput = document.getElementById("wish-message");
+    // Set up recurring side-cannon confetti shots
+    const end = Date.now() + (15 * 1000); // confetti for 15 seconds
     
-    const name = nameInput.value.trim();
-    const message = messageInput.value.trim();
+    if (confettiInterval) clearInterval(confettiInterval);
     
-    if (!name || !message) return;
-    
-    // UI response
-    triggerConfettiExplosion();
-    
-    if (firestoreEnabled) {
-        try {
-            await addDoc(collection(db, "wishes"), {
-                name: name,
-                message: message,
-                createdAt: serverTimestamp()
-            });
-            console.log("Wish sent to Firebase Cloud Firestore! ✨");
-        } catch (error) {
-            console.error("Failed to save to Firebase, saving locally:", error);
-            const updated = saveLocalWish(name, message);
-            displayWishes(updated);
+    confettiInterval = setInterval(() => {
+        const timeLeft = end - Date.now();
+        if (timeLeft <= 0) {
+            clearInterval(confettiInterval);
+            return;
         }
-    } else {
-        const updated = saveLocalWish(name, message);
-        displayWishes(updated);
+
+        const frameInterval = 50;
+        const particleCount = 25;
+
+        confetti({
+            particleCount: particleCount,
+            angle: 60,
+            spread: 55,
+            origin: { x: 0 },
+            colors: ['#fda085', '#ff758c', '#ffc4b5']
+        });
+        
+        confetti({
+            particleCount: particleCount,
+            angle: 120,
+            spread: 55,
+            origin: { x: 1 },
+            colors: ['#fda085', '#ff758c', '#ffc4b5']
+        });
+    }, 1500);
+}
+
+// -------------------------------------------------------------
+// Button Action Handler (Redirects to birthday girl's custom page)
+// -------------------------------------------------------------
+actionBtn.addEventListener("click", () => {
+    if (actionBtn.classList.contains("unlocked")) {
+        // Play final confetti burst
+        triggerSingleBurst();
+        
+        // Brief delay for transition feedback before routing
+        setTimeout(() => {
+            window.location.href = "celebration.html";
+        }, 800);
     }
-    
-    // Clear form
-    nameInput.value = "";
-    messageInput.value = "";
 });
 
-// -------------------------------------------------------------
-// App Initialization
-// -------------------------------------------------------------
+// Start the live clock once DOM has loaded
 document.addEventListener("DOMContentLoaded", () => {
-    loadGallery();
-    // Start with a small celebration confetti delay
-    setTimeout(triggerConfettiExplosion, 1000);
+    startCountdown();
 });
