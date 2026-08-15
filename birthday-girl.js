@@ -225,11 +225,23 @@ function validatePasscode() {
 }
 
 // -------------------------------------------------------------
-// Unlocking Dashboard Scene
+// Unlocking Dashboard Scene - Welcoming Letters Phase
 // -------------------------------------------------------------
 const lockView = document.getElementById("lock-screen-view");
+const welcomeLettersView = document.getElementById("welcome-letters-view");
 const dashboardView = document.getElementById("dashboard-view");
 const musicBtn = document.getElementById("music-toggle");
+
+const personalEnvelope = document.getElementById("personal-envelope");
+const personalLetter = document.getElementById("personal-letter");
+const friendsEnvelope = document.getElementById("friends-envelope");
+const friendsLetter = document.getElementById("friends-letter");
+const enterBtnWrapper = document.getElementById("enter-btn-wrapper");
+const revealDashboardBtn = document.getElementById("reveal-dashboard-btn");
+const friendsSignaturesList = document.getElementById("friends-signatures-list");
+
+let personalOpened = false;
+let friendsOpened = false;
 
 function unlockDashboard() {
     // 1. Fire massive celebratory confetti
@@ -263,28 +275,148 @@ function unlockDashboard() {
         });
     }, 1000);
 
-    // 2. Animate view transition
+    // 2. Animate view transition to Welcoming Letters screen first
     lockView.style.opacity = 0;
     lockView.style.transition = "opacity 0.8s ease";
     
     setTimeout(() => {
         lockView.style.display = "none";
-        dashboardView.style.display = "block";
-        dashboardView.style.opacity = 0;
-        dashboardView.style.transition = "opacity 0.8s ease";
+        welcomeLettersView.style.display = "block";
+        welcomeLettersView.style.opacity = 0;
+        welcomeLettersView.style.transition = "opacity 0.8s ease";
         
-        // fade in dashboard
         setTimeout(() => {
-            dashboardView.style.opacity = 1;
+            welcomeLettersView.style.opacity = 1;
         }, 50);
 
         // Enable music control
         musicBtn.style.display = "flex";
         playMusic();
         
-        // 3. Bind database load streams
-        loadDashboardData();
+        // 3. Load dynamic signatures list of friends' names from Firestore
+        loadFriendsSignatures();
     }, 800);
+}
+
+// -------------------------------------------------------------
+// Welcoming Letters Phase Events
+// -------------------------------------------------------------
+
+// Personal Letter Envelope click
+personalEnvelope.addEventListener("click", () => {
+    confetti({
+        particleCount: 50,
+        spread: 40,
+        origin: { y: 0.6 },
+        colors: ['#fda085', '#ff758c', '#ffffff']
+    });
+    
+    personalEnvelope.style.display = "none";
+    personalLetter.style.display = "block";
+    personalOpened = true;
+    checkLettersOpened();
+});
+
+// Friends Letter Envelope click
+friendsEnvelope.addEventListener("click", () => {
+    confetti({
+        particleCount: 50,
+        spread: 40,
+        origin: { y: 0.6 },
+        colors: ['#fda085', '#ff758c', '#ffffff']
+    });
+    
+    friendsEnvelope.style.display = "none";
+    friendsLetter.style.display = "block";
+    friendsOpened = true;
+    checkLettersOpened();
+});
+
+// Show dashboard enter button once both letters are opened
+function checkLettersOpened() {
+    if (personalOpened && friendsOpened) {
+        enterBtnWrapper.style.display = "flex";
+        enterBtnWrapper.style.opacity = 0;
+        enterBtnWrapper.style.transition = "opacity 0.8s ease";
+        setTimeout(() => {
+            enterBtnWrapper.style.opacity = 1;
+        }, 100);
+    }
+}
+
+// Transition from Welcome Letters to Main Dashboard Grid
+revealDashboardBtn.addEventListener("click", () => {
+    confetti({
+        particleCount: 120,
+        spread: 70,
+        origin: { y: 0.6 },
+        colors: particleColors
+    });
+
+    welcomeLettersView.style.opacity = 0;
+    welcomeLettersView.style.transition = "opacity 0.6s ease";
+
+    setTimeout(() => {
+        welcomeLettersView.style.display = "none";
+        
+        // Reveal Dashboard
+        dashboardView.style.display = "block";
+        dashboardView.style.opacity = 0;
+        dashboardView.style.transition = "opacity 0.8s ease";
+        
+        setTimeout(() => {
+            dashboardView.style.opacity = 1;
+        }, 50);
+
+        // Bind main dashboard grid data streams
+        loadDashboardData();
+    }, 600);
+});
+
+// Helper to fetch wishes collection names and render signature items
+function loadFriendsSignatures() {
+    if (!firestoreEnabled) {
+        renderFallbackSignatures();
+        return;
+    }
+
+    const wishesQuery = query(collection(db, "wishes"), orderBy("createdAt", "desc"));
+    onSnapshot(wishesQuery, (snapshot) => {
+        friendsSignaturesList.innerHTML = "";
+        const namesSet = new Set();
+        
+        snapshot.forEach(doc => {
+            const data = doc.data();
+            if (data.name) {
+                namesSet.add(data.name.trim());
+            }
+        });
+
+        if (namesSet.size === 0) {
+            renderFallbackSignatures();
+        } else {
+            namesSet.forEach(name => {
+                const item = document.createElement("span");
+                item.className = "signature-item";
+                item.textContent = `${name} 🖋️`;
+                friendsSignaturesList.appendChild(item);
+            });
+        }
+    }, (error) => {
+        console.error("Signatures collection query failed:", error);
+        renderFallbackSignatures();
+    });
+}
+
+function renderFallbackSignatures() {
+    friendsSignaturesList.innerHTML = "";
+    const list = ["Sarah 🖋️", "Rian 🖋️", "Dewi 🖋️", "Adi 🖋️", "Laras 🖋️", "Frost 🖋️"];
+    list.forEach(name => {
+        const item = document.createElement("span");
+        item.className = "signature-item";
+        item.textContent = name;
+        friendsSignaturesList.appendChild(item);
+    });
 }
 
 // -------------------------------------------------------------

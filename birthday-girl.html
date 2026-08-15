@@ -85,6 +85,75 @@
     </div>
 
     <!-- ==========================================
+         WELCOME LETTERS SECTION
+         ========================================== -->
+    <div class="welcome-letters-container" id="welcome-letters-view" style="display: none;">
+        <div class="letters-content-wrapper">
+            <div class="sub-header">
+                <span class="diamond-icon">✦</span>
+                <span class="sub-header-text">YOU HAVE MAIL</span>
+                <span class="diamond-icon">✦</span>
+            </div>
+            <h1 class="welcome-letters-title">Unwrap Your Messages</h1>
+            <p class="welcome-letters-desc">Two special envelopes are waiting for you. Click on them to read.</p>
+            
+            <div class="envelopes-row">
+                <!-- Letter 1: Personal Letter -->
+                <div class="envelope-item" id="personal-envelope-group">
+                    <div class="letter-envelope" id="personal-envelope">
+                        <div class="envelope-stamp">✨</div>
+                        <h3 class="envelope-label">A Letter to Twenty-Two</h3>
+                        <span class="envelope-hint">Click to read</span>
+                    </div>
+                    
+                    <div class="opened-letter glass-card" id="personal-letter" style="display: none;">
+                        <h2 class="letter-title">A Letter to Twenty-Two ✨</h2>
+                        <div class="letter-divider"></div>
+                        <div class="letter-body-text">
+                            <p class="salutation">Dear Twenty-Two,</p>
+                            <p>I arrive carrying lessons, losses, victories, prayers, dreams, and memories.</p>
+                            <p>I am not who I was, and I am not yet who I will become.</p>
+                            <p>But by the grace of God, I am still growing.</p>
+                            <p>May this year be filled with purpose, peace, courage, joy, and beautiful new beginnings.</p>
+                            <p class="valediction">Love,</p>
+                            <p class="signature-name">Frost 🤍</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Letter 2: Friends Signatures -->
+                <div class="envelope-item" id="friends-envelope-group">
+                    <div class="letter-envelope" id="friends-envelope">
+                        <div class="envelope-stamp">💌</div>
+                        <h3 class="envelope-label">Letters from Friends</h3>
+                        <span class="envelope-hint">Click to read</span>
+                    </div>
+                    
+                    <div class="opened-letter glass-card" id="friends-letter" style="display: none;">
+                        <h2 class="letter-title">Wishes from Friends 💌</h2>
+                        <div class="letter-divider"></div>
+                        <div class="letter-body-text">
+                            <p class="friends-intro-text">The following friends have left happy birthday messages for you:</p>
+                            <div class="friends-signatures-grid" id="friends-signatures-list">
+                                <div class="loading-signatures">
+                                    <i class="fa-solid fa-spinner fa-spin"></i> Loading signatures...
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bottom Dashboard Link button -->
+            <div class="enter-btn-wrapper" id="enter-btn-wrapper" style="display: none;">
+                <button class="enter-dashboard-btn" id="reveal-dashboard-btn">
+                    Enter Your Universe 🌟
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==========================================
          DASHBOARD SECTION (Unlocked Universe)
          ========================================== -->
     <div class="dashboard-container" id="dashboard-view" style="display: none;">
