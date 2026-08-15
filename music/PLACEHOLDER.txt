@@ -1,0 +1,7 @@
+Upload your custom music files here!
+
+Please name your files as follows to match the existing audio tags:
+1. "bg-music.mp3" - Background ambient music played on the countdown landing page, guest wishes wall, and birthday girl main dashboard.
+2. "birthday-song.mp3" - Upbeat Happy Birthday song played in the Celebration Room when the candles are blown out.
+
+Format support: MP3 or WAV format is recommended.
