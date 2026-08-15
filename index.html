@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Birthday! 🎈</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Canvas Confetti Library -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="index.css">
+</head>
+<body>
+    <!-- Background Music (Audio Element) -->
+    <audio id="bg-music" loop>
+        <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+        <!-- You can replace this link with a sweet birthday song later -->
+    </audio>
+
+    <!-- Floating Audio Control -->
+    <button id="music-toggle" class="music-btn" aria-label="Toggle Music">
+        <i class="fas fa-music"></i>
+    </button>
+
+    <!-- Hero / Celebration Section -->
+    <header class="hero">
+        <div class="hero-overlay"></div>
+        <div class="container hero-content">
+            <span class="pre-title">HAPPY BIRTHDAY TO OUR DEAREST</span>
+            <h1 class="niece-name">Niece ❤️</h1>
+            <p class="hero-subtitle">Wishing you a day filled with laughter, love, and endless joy! Click below to open your special birthday card.</p>
+            
+            <button id="open-card-btn" class="btn btn-primary">
+                Open Birthday Card <i class="fas fa-gift"></i>
+            </button>
+        </div>
+        
+        <div class="scroll-indicator">
+            <span>Scroll down to see memories</span>
+            <i class="fas fa-chevron-down"></i>
+        </div>
+    </header>
+
+    <!-- Interactive Birthday Card Modal/Popup -->
+    <div id="card-modal" class="modal">
+        <div class="modal-content card-container">
+            <button class="close-modal">&times;</button>
+            <div class="birthday-card">
+                <div class="card-cover">
+                    <h3>Tap to Open 💖</h3>
+                </div>
+                <div class="card-inside">
+                    <h2>Dearest Niece,</h2>
+                    <p>May this year bring you closer to all your dreams. You deserve the best that life has to offer, and we are so proud of the wonderful person you are becoming.</p>
+                    <p class="signature">With love, <br>Your Family</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content Section -->
+    <main>
+        <!-- Memory Lane / Photo Gallery -->
+        <section id="gallery" class="gallery-section">
+            <div class="container">
+                <h2 class="section-title">Memory Lane 📸</h2>
+                <p class="section-subtitle">A collection of beautiful moments together. (Upload your pictures to the <code>images/</code> folder to display them here!)</p>
+                
+                <!-- Pictures Grid -->
+                <div class="gallery-grid" id="gallery-grid">
+                    <!-- Placeholder cards before pictures are uploaded -->
+                    <div class="gallery-item">
+                        <div class="img-placeholder">
+                            <i class="fas fa-image"></i>
+                            <p>Photo 1</p>
+                        </div>
+                        <div class="gallery-caption">Your First Memory</div>
+                    </div>
+                    <div class="gallery-item">
+                        <div class="img-placeholder">
+                            <i class="fas fa-image"></i>
+                            <p>Photo 2</p>
+                        </div>
+                        <div class="gallery-caption">A Special Moment</div>
+                    </div>
+                    <div class="gallery-item">
+                        <div class="img-placeholder">
+                            <i class="fas fa-image"></i>
+                            <p>Photo 3</p>
+                        </div>
+                        <div class="gallery-caption">Happy Times</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Wishes Board (Firebase Connected) -->
+        <section id="wishes" class="wishes-section">
+            <div class="container">
+                <h2 class="section-title">Leave a Wish 🌟</h2>
+                <p class="section-subtitle">Write a lovely message to celebrate her special day!</p>
+                
+                <div class="wishes-layout">
+                    <!-- Submit a Wish Form -->
+                    <div class="wish-form-container">
+                        <form id="wish-form" class="wish-form">
+                            <div class="form-group">
+                                <label for="sender-name">Your Name</label>
+                                <input type="text" id="sender-name" required placeholder="e.g., Uncle John">
+                            </div>
+                            <div class="form-group">
+                                <label for="wish-message">Your Wish</label>
+                                <textarea id="wish-message" required placeholder="Write your heartfelt message here..."></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-secondary">Send Wish ✨</button>
+                        </form>
+                    </div>
+
+                    <!-- Wishes Display Board -->
+                    <div class="wishes-board">
+                        <h3>Wishes Board</h3>
+                        <div class="wishes-list" id="wishes-list">
+                            <!-- Wishes will populate dynamically from Firebase -->
+                            <div class="wish-card loading">
+                                <p>Loading wishes...</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container text-center">
+            <p>Made with ❤️ for a wonderful Niece</p>
+            <p>&copy; 2026. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Firebase configuration & app scripts -->
+    <script type="importmap">
+      {
+        "imports": {
+          "firebase/app": "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js",
+          "firebase/analytics": "https://www.gstatic.com/firebasejs/10.8.0/firebase-analytics.js",
+          "firebase/firestore": "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js"
+        }
+      }
+    </script>
+    <script type="module" src="app.js"></script>
+</body>
+</html>
