@@ -83,9 +83,9 @@ class Particle {
     }
 
     draw() {
-        ctx.fillStyle = `rgba(253, 160, 133, ${this.opacity})`;
+        ctx.fillStyle = `rgba(255, 117, 151, ${this.opacity})`;
         ctx.shadowBlur = this.size * 2;
-        ctx.shadowColor = "#fda085";
+        ctx.shadowColor = "#ff7597";
         ctx.beginPath();
         ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
         ctx.fill();
@@ -184,7 +184,7 @@ function displayWishes(wishes) {
         wishesList.innerHTML = `
             <div class="empty-state">
                 <i class="fa-regular fa-comments"></i>
-                <p>Belum ada ucapan. Jadilah yang pertama mengirimkan ucapan hangat! 💖</p>
+                <p>No wishes yet. Be the first to leave a warm message! 💖</p>
             </div>
         `;
         return;
@@ -261,7 +261,7 @@ wishForm.addEventListener("submit", async (e) => {
         particleCount: 80,
         spread: 60,
         origin: { y: 0.7 },
-        colors: ['#fda085', '#ff758c', '#ffffff']
+        colors: ['#ff7597', '#ff477e', '#ffffff']
     });
     
     if (firestoreEnabled) {
@@ -307,7 +307,7 @@ if (sealedEnvelope) {
             particleCount: 80,
             spread: 50,
             origin: { y: 0.6 },
-            colors: ['#fda085', '#ff758c', '#ffffff']
+            colors: ['#ff7597', '#ff477e', '#ffffff']
         });
         
         sealedEnvelope.style.display = "none";
@@ -322,7 +322,7 @@ if (proceedToWishesBtn) {
             particleCount: 50,
             spread: 40,
             origin: { y: 0.8 },
-            colors: ['#fda085', '#ff758c', '#ffffff']
+            colors: ['#ff7597', '#ff477e', '#ffffff']
         });
         
         // Hide envelope/letter layout smoothly

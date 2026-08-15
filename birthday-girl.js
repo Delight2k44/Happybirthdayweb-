@@ -52,12 +52,12 @@ window.addEventListener("resize", () => {
 
 // Colorful particles array
 const particleColors = [
-    "#fda085", // warm rose gold
-    "#ff758c", // pink
-    "#e5c158", // gold
+    "#ff7597", // sweet romantic pink
+    "#ff477e", // hot vibrant pink
+    "#ffb9cd", // soft baby pink
     "#ff85a1", // soft magenta
-    "#ffc4b5", // champagne
-    "#ffd275"  // bright yellow
+    "#ffcad4", // light pastel pink
+    "#ff2e63"  // neon rose pink
 ];
 
 class Particle {
@@ -308,7 +308,7 @@ personalEnvelope.addEventListener("click", () => {
         particleCount: 50,
         spread: 40,
         origin: { y: 0.6 },
-        colors: ['#fda085', '#ff758c', '#ffffff']
+        colors: ['#ff7597', '#ff477e', '#ffffff']
     });
     
     personalEnvelope.style.display = "none";
@@ -323,7 +323,7 @@ friendsEnvelope.addEventListener("click", () => {
         particleCount: 50,
         spread: 40,
         origin: { y: 0.6 },
-        colors: ['#fda085', '#ff758c', '#ffffff']
+        colors: ['#ff7597', '#ff477e', '#ffffff']
     });
     
     friendsEnvelope.style.display = "none";
@@ -807,7 +807,8 @@ function blowOutCandles() {
         confetti({
             particleCount: 50,
             spread: 80,
-            origin: { y: 0.6 }
+            origin: { y: 0.6 },
+            colors: ['#ff7597', '#ff477e', '#ffb9cd', '#ffffff']
         });
     }, 1000);
 }

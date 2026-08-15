@@ -1,19 +1,19 @@
 /* 22 YEARS OF FROST - Birthday Girl Dashboard Styling */
 :root {
-    /* Color Palette */
-    --dark-bg: #0d0506;
-    --dark-mid: #16080a;
-    --dark-light: #220f12;
+    /* Color Palette - Vibrant & Sweet Pink Theme */
+    --dark-bg: #0e0205; /* deep dark black-cherry */
+    --dark-mid: #1c050a;
+    --dark-light: #2c0b13;
     
-    --rose-gold-light: #ffc4b5;
-    --rose-gold: #fda085;
-    --rose-gold-dark: #e0876f;
-    --gold: #e5c158;
+    --rose-gold-light: #ffb9cd; /* baby pink */
+    --rose-gold: #ff7597;       /* sweet romantic pink */
+    --rose-gold-dark: #ff477e;  /* hot magenta pink */
+    --gold: #ffb9cd;            /* light pink highlights */
     
     /* Neon Glo Colors */
-    --glow-gold: rgba(229, 193, 88, 0.35);
-    --glow-rose: rgba(253, 160, 133, 0.25);
-    --glow-red: rgba(255, 117, 140, 0.4);
+    --glow-gold: rgba(255, 185, 205, 0.35);
+    --glow-rose: rgba(255, 117, 151, 0.25);
+    --glow-red: rgba(255, 71, 126, 0.4);
     
     --text-primary: #f5e6e8;
     --text-secondary: #cfa8ae;
@@ -1514,4 +1514,16 @@ body {
 @keyframes roomFadeIn {
     from { opacity: 0; }
     to { opacity: 1; }
+}
+
+/* Designed by Credits Footer styling */
+.marking-footer {
+    font-size: 0.75rem;
+    letter-spacing: 0.08em;
+    color: var(--text-muted);
+    opacity: 0.6;
+    text-align: center;
+    padding: 2.5rem 0 1.5rem 0;
+    font-weight: 300;
+    width: 100%;
 }

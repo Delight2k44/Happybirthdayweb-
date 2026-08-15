@@ -58,41 +58,41 @@
                 <div class="glass-card upload-card">
                     <form id="memories-form">
                         <div class="form-group" style="width: 100%; max-width: 480px; margin: 0 auto 2.5rem auto;">
-                            <label for="sender-name" style="display: block; font-size: 0.8rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: var(--rose-gold); text-align: center; margin-bottom: 0.75rem;">Nama Kamu (Your Name)</label>
+                            <label for="sender-name" style="display: block; font-size: 0.8rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: var(--rose-gold); text-align: center; margin-bottom: 0.75rem;">Your Name</label>
                             <input type="text" id="sender-name" class="caption-input" placeholder="e.g., Uncle John or Sarah" required style="font-size: 1rem; padding: 0.85rem 1.25rem; text-align: center;">
                         </div>
                         <div class="dropzones-container">
                             <!-- Memory 1 Dropzone -->
                             <div class="memory-upload-group">
-                                <span class="group-label">Memori #1</span>
+                                <span class="group-label">Memory #1</span>
                                 <div class="polaroid-dropzone" id="dropzone-1">
                                     <input type="file" id="file-input-1" accept="image/*" class="file-input" required>
                                     <div class="dropzone-content" id="preview-container-1">
                                         <i class="fa-solid fa-camera camera-icon"></i>
-                                        <p class="upload-text">Pilih Foto</p>
+                                        <p class="upload-text">Choose Photo</p>
                                         <span class="upload-subtext">Click to upload</span>
                                     </div>
                                 </div>
-                                <input type="text" id="caption-1" class="caption-input" placeholder="Tulis kenangan manis..." required>
+                                <input type="text" id="caption-1" class="caption-input" placeholder="Write a sweet memory..." required>
                             </div>
 
                             <!-- Memory 2 Dropzone -->
                             <div class="memory-upload-group">
-                                <span class="group-label">Memori #2</span>
+                                <span class="group-label">Memory #2</span>
                                 <div class="polaroid-dropzone" id="dropzone-2">
                                     <input type="file" id="file-input-2" accept="image/*" class="file-input" required>
                                     <div class="dropzone-content" id="preview-container-2">
                                         <i class="fa-solid fa-camera camera-icon"></i>
-                                        <p class="upload-text">Pilih Foto</p>
+                                        <p class="upload-text">Choose Photo</p>
                                         <span class="upload-subtext">Click to upload</span>
                                     </div>
                                 </div>
-                                <input type="text" id="caption-2" class="caption-input" placeholder="Tulis kenangan manis..." required>
+                                <input type="text" id="caption-2" class="caption-input" placeholder="Write a sweet memory..." required>
                             </div>
                         </div>
 
                         <button type="submit" class="package-btn" id="package-memories-btn">
-                            Bungkus Memori 🎁
+                            Wrap Memories 🎁
                         </button>
                     </form>
                 </div>
@@ -129,13 +129,18 @@
 
                 <!-- Final Action CTA (Pops up after packaging finishes) -->
                 <div class="final-cta-container" id="final-cta-container" style="display: none;">
-                    <p class="success-caption">✨ Memori Kamu telah terbungkus rapi! ✨</p>
+                    <p class="success-caption">✨ Your memories have been beautifully wrapped! ✨</p>
                     <button class="celebrate-btn" id="finish-celebration-btn">
-                        🔓 BUKA KOTAK ULANG TAHUN 🎁
+                        🔓 OPEN BIRTHDAY BOX 🎁
                     </button>
                 </div>
             </section>
         </main>
+        
+        <!-- Designed by Credits Footer -->
+        <footer class="marking-footer">
+            Designed by Delight Chetter (0822349565 for more info) 🤍
+        </footer>
     </div>
 
     <!-- RSVP Modal (Hidden by default) -->
@@ -143,16 +148,16 @@
         <div class="rsvp-modal-content glass-card">
             <!-- Phase 1: Question -->
             <div id="rsvp-question-view">
-                <h2 class="rsvp-title">Terima Kasih! 💖</h2>
-                <p class="rsvp-text">Kenangan manis kamu sudah terbungkus rapi.</p>
+                <h2 class="rsvp-title">Thank You! 💖</h2>
+                <p class="rsvp-text">Your sweet memories have been wrapped beautifully.</p>
                 <div class="rsvp-divider"></div>
-                <h3 class="rsvp-question">Apakah kamu akan menghadiri acara ulang tahunnya?</h3>
+                <h3 class="rsvp-question">Are you attending the birthday celebration?</h3>
                 <div class="rsvp-btn-group">
                     <button id="rsvp-yes-btn" class="rsvp-option-btn yes-btn">
-                        <i class="fa-solid fa-circle-check"></i> Ya, saya datang! 🎉
+                        <i class="fa-solid fa-circle-check"></i> Yes, I am coming! 🎉
                     </button>
                     <button id="rsvp-no-btn" class="rsvp-option-btn no-btn">
-                        <i class="fa-solid fa-circle-xmark"></i> Tidak bisa hadir 🌸
+                        <i class="fa-solid fa-circle-xmark"></i> Can't make it 🌸
                     </button>
                 </div>
             </div>
@@ -160,20 +165,20 @@
             <!-- Phase 2: Yes Response -->
             <div id="rsvp-yes-view" style="display: none;">
                 <i class="fa-solid fa-champagne-glasses rsvp-status-icon celebrate"></i>
-                <h2 class="rsvp-title">Sampai Jumpa di Sana! 🥳</h2>
-                <p class="rsvp-text">Kehadiranmu akan membuat hari spesial ini jauh lebih indah. Kami tidak sabar merayakannya bersama! 🎂✨</p>
+                <h2 class="rsvp-title">See You There! 🥳</h2>
+                <p class="rsvp-text">Your presence will make this special day even more beautiful. We can't wait to celebrate together! 🎂✨</p>
                 <button class="rsvp-finish-btn" id="finish-yes-redirect">
-                    Selesai & Kembali 🏠
+                    Finish & Go Back 🏠
                 </button>
             </div>
 
             <!-- Phase 3: No Response -->
             <div id="rsvp-no-view" style="display: none;">
                 <i class="fa-solid fa-heart-crack rsvp-status-icon sad"></i>
-                <h2 class="rsvp-title">Kami Mengerti... 🌸</h2>
-                <p class="rsvp-text">Sayang sekali kamu tidak bisa hadir, tetapi terima kasih banyak atas doa dan kenangan indah yang telah dikirimkan. Kamu akan tetap dirindukan! 💖</p>
+                <h2 class="rsvp-title">We Understand... 🌸</h2>
+                <p class="rsvp-text">We are sorry you can't make it, but thank you so much for the warm wishes and memories you shared. You will be missed! 💖</p>
                 <button class="rsvp-finish-btn" id="finish-no-redirect">
-                    Selesai & Kembali 🏠
+                    Finish & Go Back 🏠
                 </button>
             </div>
         </div>

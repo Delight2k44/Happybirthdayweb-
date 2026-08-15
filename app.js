@@ -65,9 +65,9 @@ class Particle {
     }
 
     draw() {
-        ctx.fillStyle = `rgba(253, 160, 133, ${this.opacity})`;
+        ctx.fillStyle = `rgba(255, 117, 151, ${this.opacity})`;
         ctx.shadowBlur = this.size * 2.5;
-        ctx.shadowColor = "#fda085";
+        ctx.shadowColor = "#ff7597";
         ctx.beginPath();
         ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
         ctx.fill();
@@ -182,7 +182,7 @@ function handleCountdownExpiry() {
     secondsEl.textContent = "00";
 
     // 2. Update status label
-    statusText.innerHTML = `<i class="fa-solid fa-cake-candles" style="color: #ff758c; animation: pulse 1.2s infinite;"></i> Waktunya telah tiba! Selamat Ulang Tahun! 💖`;
+    statusText.innerHTML = `<i class="fa-solid fa-cake-candles" style="color: #ff758c; animation: pulse 1.2s infinite;"></i> The time has arrived! Happy Birthday! 💖`;
     statusText.style.color = "#fda085";
 
     // 3. Unlock action button
@@ -194,7 +194,7 @@ function handleCountdownExpiry() {
     btnLockIcon.style.color = "#fda085";
     
     // Change button text
-    btnText.textContent = "MASUK KE PESTA 🎈";
+    btnText.textContent = "ENTER THE PARTY 🎈";
 
     // 4. Trigger celebration effects
     triggerContinuousCelebration();
@@ -208,7 +208,7 @@ function triggerSingleBurst() {
         particleCount: 100,
         spread: 80,
         origin: { y: 0.6 },
-        colors: ['#fda085', '#ff758c', '#ffc4b5', '#ffffff']
+        colors: ['#ff7597', '#ff477e', '#ffb9cd', '#ffffff']
     });
 }
 
@@ -236,7 +236,7 @@ function triggerContinuousCelebration() {
             angle: 60,
             spread: 55,
             origin: { x: 0 },
-            colors: ['#fda085', '#ff758c', '#ffc4b5']
+            colors: ['#ff7597', '#ff477e', '#ffb9cd']
         });
         
         confetti({
@@ -244,7 +244,7 @@ function triggerContinuousCelebration() {
             angle: 120,
             spread: 55,
             origin: { x: 1 },
-            colors: ['#fda085', '#ff758c', '#ffc4b5']
+            colors: ['#ff7597', '#ff477e', '#ffb9cd']
         });
     }, 1500);
 }

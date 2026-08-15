@@ -74,9 +74,9 @@ class Particle {
     }
 
     draw() {
-        ctx.fillStyle = `rgba(253, 160, 133, ${this.opacity})`;
+        ctx.fillStyle = `rgba(255, 117, 151, ${this.opacity})`;
         ctx.shadowBlur = this.size * 2;
-        ctx.shadowColor = "#fda085";
+        ctx.shadowColor = "#ff7597";
         ctx.beginPath();
         ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
         ctx.fill();
@@ -279,7 +279,7 @@ memoriesForm.addEventListener("submit", async (e) => {
     
     // Safety check - require both images uploaded
     if (!memoryImages[0] || !memoryImages[1]) {
-        alert("Harap pilih kedua foto memori Anda terlebih dahulu! 😊");
+        alert("Please select both of your memory photos first! 😊");
         return;
     }
 
@@ -292,7 +292,7 @@ memoriesForm.addEventListener("submit", async (e) => {
     // Change button text to indicate active loading
     const packageBtn = document.getElementById("package-memories-btn");
     packageBtn.disabled = true;
-    packageBtn.innerHTML = 'Memproses Kenangan... <i class="fa-solid fa-spinner fa-spin"></i>';
+    packageBtn.innerHTML = 'Wrapping Memories... <i class="fa-solid fa-spinner fa-spin"></i>';
 
     // Save name locally
     localStorage.setItem("sender_name", name);
@@ -363,7 +363,7 @@ function runPackagingSequence() {
             particleCount: 50,
             spread: 40,
             origin: { y: 0.5 },
-            colors: ['#fda085', '#ff758c', '#ffffff']
+            colors: ['#ff7597', '#ff477e', '#ffffff']
         });
     }, 2000);
 
@@ -473,7 +473,7 @@ rsvpYesBtn.addEventListener("click", async () => {
         particleCount: 150,
         spread: 80,
         origin: { y: 0.6 },
-        colors: ['#fda085', '#ff758c', '#ffffff']
+        colors: ['#ff7597', '#ff477e', '#ffffff']
     });
 
     // Transition views

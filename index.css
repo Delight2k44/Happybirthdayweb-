@@ -1,27 +1,27 @@
 /* 22 YEARS OF FROST - Moody Dark CSS Design System */
 :root {
-    /* Color Palette */
-    --dark-bg: #0d0506;
-    --dark-mid: #18090b;
-    --dark-light: #251013;
+    /* Color Palette - Vibrant & Sweet Pink Theme */
+    --dark-bg: #0e0205; /* deep dark black-cherry */
+    --dark-mid: #1c050a;
+    --dark-light: #2c0b13;
     
-    --rose-gold-light: #ffc4b5;
-    --rose-gold: #fda085;
-    --rose-gold-dark: #e68065;
+    --rose-gold-light: #ffb9cd; /* baby pink */
+    --rose-gold: #ff7597;       /* sweet romantic pink */
+    --rose-gold-dark: #ff477e;  /* hot magenta pink */
     
     --text-primary: #f5e6e8;
     --text-secondary: #cfa8ae;
     --text-muted: #8e6c72;
     
     /* Glowing Effects */
-    --glow-color: rgba(253, 160, 133, 0.25);
-    --btn-glow-color: rgba(253, 160, 133, 0.4);
-    --glass-border: rgba(255, 255, 255, 0.05);
-    --glass-border-glow: rgba(253, 160, 133, 0.2);
+    --glow-color: rgba(255, 117, 151, 0.3);
+    --btn-glow-color: rgba(255, 71, 126, 0.45);
+    --glass-border: rgba(255, 255, 255, 0.04);
+    --glass-border-glow: rgba(255, 117, 151, 0.25);
     
     /* Shadows */
-    --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
-    --text-glow: 0 0 15px rgba(253, 160, 133, 0.3);
+    --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.6);
+    --text-glow: 0 0 15px rgba(255, 117, 151, 0.35);
 }
 
 /* Reset and Base Styles */
@@ -398,4 +398,16 @@ body {
     10%, 30%, 50% { transform: rotate(15deg); }
     20%, 40% { transform: rotate(-15deg); }
     60% { transform: rotate(0); }
+}
+
+/* Designed by Credits Footer styling */
+.marking-footer {
+    font-size: 0.75rem;
+    letter-spacing: 0.08em;
+    color: var(--text-muted);
+    opacity: 0.6;
+    text-align: center;
+    padding: 2.5rem 0 1.5rem 0;
+    font-weight: 300;
+    width: 100%;
 }
