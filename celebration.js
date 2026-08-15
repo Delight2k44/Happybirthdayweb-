@@ -272,13 +272,18 @@ wishForm.addEventListener("submit", async (e) => {
     // Mark wish as sent — prevents sending again even after page reload
     localStorage.setItem(wishSentKey, "true");
     
-    // Show success view
+    // Show success view briefly
     wishFormWrapper.style.display = "none";
     wishSuccessState.style.display = "block";
     
     // Clear inputs
     nameInput.value = "";
     messageInput.value = "";
+
+    // Auto-redirect to memories page after 2.5 seconds
+    setTimeout(() => {
+        window.location.href = "memories.html";
+    }, 2500);
 });
 
 // -------------------------------------------------------------
