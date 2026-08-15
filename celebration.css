@@ -103,6 +103,24 @@ body {
     text-shadow: var(--text-glow);
 }
 
+.next-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    color: var(--text-secondary);
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    transition: all 0.3s ease;
+}
+
+.next-link:hover {
+    color: var(--rose-gold);
+    transform: translateX(4px);
+    text-shadow: var(--text-glow);
+}
+
 /* Floating Music Control Button */
 .music-btn {
     width: 2.8rem;

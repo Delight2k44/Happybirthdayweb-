@@ -279,6 +279,10 @@ wishForm.addEventListener("submit", async (e) => {
         displayWishes(updated);
     }
     
+    // Show success view
+    document.getElementById("wish-form-wrapper").style.display = "none";
+    document.getElementById("wish-success-state").style.display = "block";
+    
     // Clear inputs
     nameInput.value = "";
     messageInput.value = "";

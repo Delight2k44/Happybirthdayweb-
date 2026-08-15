@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Memory Lane ✦ 22 YEARS OF FROST</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,400&family=Inter:wght@300;400;600&family=Caveat:wght@400;700&display=swap" rel="stylesheet">
+    
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Canvas Confetti Library -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="memories.css">
+</head>
+<body>
+    <!-- Canvas for Floating Ambient Particles -->
+    <canvas id="particle-canvas"></canvas>
+
+    <!-- Background Music -->
+    <audio id="bg-music" loop>
+        <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+    </audio>
+
+    <!-- Navigation Header -->
+    <header class="navbar">
+        <a href="celebration.html" class="back-link">
+            <i class="fa-solid fa-arrow-left-long"></i> Kembali
+        </a>
+        
+        <!-- Floating Audio Control -->
+        <button id="music-toggle" class="music-btn" aria-label="Toggle Music">
+            <i class="fas fa-music"></i>
+        </button>
+    </header>
+
+    <!-- Memories Container -->
+    <div class="memories-container">
+        <div class="content-header">
+            <div class="sub-header">
+                <span class="diamond-icon">✦</span>
+                <span class="sub-header-text">22 YEARS OF FROST</span>
+                <span class="diamond-icon">✦</span>
+            </div>
+            <h1 class="main-title">Share Your Memories</h1>
+            <p class="subtitle">Upload two of your best fun and memorable moments with her! 📸</p>
+        </div>
+
+        <main class="memories-layout">
+            <!-- Form Card Wrapper -->
+            <section class="form-wrapper" id="memories-form-wrapper">
+                <div class="glass-card upload-card">
+                    <form id="memories-form">
+                        <div class="dropzones-container">
+                            <!-- Memory 1 Dropzone -->
+                            <div class="memory-upload-group">
+                                <span class="group-label">Memori #1</span>
+                                <div class="polaroid-dropzone" id="dropzone-1">
+                                    <input type="file" id="file-input-1" accept="image/*" class="file-input" required>
+                                    <div class="dropzone-content" id="preview-container-1">
+                                        <i class="fa-solid fa-camera camera-icon"></i>
+                                        <p class="upload-text">Pilih Foto</p>
+                                        <span class="upload-subtext">Click to upload</span>
+                                    </div>
+                                </div>
+                                <input type="text" id="caption-1" class="caption-input" placeholder="Tulis kenangan manis..." required>
+                            </div>
+
+                            <!-- Memory 2 Dropzone -->
+                            <div class="memory-upload-group">
+                                <span class="group-label">Memori #2</span>
+                                <div class="polaroid-dropzone" id="dropzone-2">
+                                    <input type="file" id="file-input-2" accept="image/*" class="file-input" required>
+                                    <div class="dropzone-content" id="preview-container-2">
+                                        <i class="fa-solid fa-camera camera-icon"></i>
+                                        <p class="upload-text">Pilih Foto</p>
+                                        <span class="upload-subtext">Click to upload</span>
+                                    </div>
+                                </div>
+                                <input type="text" id="caption-2" class="caption-input" placeholder="Tulis kenangan manis..." required>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="package-btn" id="package-memories-btn">
+                            Bungkus Memori 🎁
+                        </button>
+                    </form>
+                </div>
+            </section>
+
+            <!-- 3D Packaging Animation Scene (Hidden initially) -->
+            <section class="packaging-scene" id="packaging-scene" style="display: none;">
+                <!-- 3D Gift Box -->
+                <div class="gift-box-wrapper">
+                    <div class="gift-box" id="gift-box">
+                        <!-- Top Lid -->
+                        <div class="box-lid">
+                            <div class="box-lid-top"></div>
+                            <div class="box-lid-side side-front"></div>
+                            <div class="box-lid-side side-back"></div>
+                            <div class="box-lid-side side-left"></div>
+                            <div class="box-lid-side side-right"></div>
+                        </div>
+                        <!-- Box Body -->
+                        <div class="box-body">
+                            <div class="box-body-side body-front"></div>
+                            <div class="box-body-side body-back"></div>
+                            <div class="box-body-side body-left"></div>
+                            <div class="box-body-side body-right"></div>
+                            <div class="box-body-side body-bottom"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Floating polaroids container -->
+                <div class="polaroids-output" id="polaroids-output">
+                    <!-- Loaded dynamically via JS -->
+                </div>
+
+                <!-- Final Action CTA (Pops up after packaging finishes) -->
+                <div class="final-cta-container" id="final-cta-container" style="display: none;">
+                    <p class="success-caption">✨ Memori Kamu telah terbungkus rapi! ✨</p>
+                    <button class="celebrate-btn" id="finish-celebration-btn">
+                        🔓 BUKA KOTAK ULANG TAHUN 🎁
+                    </button>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Script map -->
+    <script type="importmap">
+      {
+        "imports": {
+          "firebase/app": "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js",
+          "firebase/analytics": "https://www.gstatic.com/firebasejs/10.8.0/firebase-analytics.js",
+          "firebase/firestore": "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js"
+        }
+      }
+    </script>
+    <script type="module" src="memories.js"></script>
+</body>
+</html>
