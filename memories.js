@@ -16,7 +16,12 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
+let analytics;
+try {
+    analytics = getAnalytics(app);
+} catch (e) {
+    console.warn("Analytics init failed:", e);
+}
 
 // Initialize Firestore
 let db;
@@ -179,9 +184,9 @@ fileInputs.forEach((input, index) => {
         }
     });
 });
-// Image compression helper
-function compressImage(dataUrl, maxWidth = 600, maxHeight = 600, quality = 0.7) {
-    return new Promise((resolve) => {
+// Image compression helper — compress aggressively to fit Firestore's 1MB doc limit
+function compressImage(dataUrl, maxWidth = 400, maxHeight = 400, quality = 0.5) {
+    return new Promise((resolve, reject) => {
         const img = new Image();
         img.src = dataUrl;
         img.onload = () => {
@@ -208,6 +213,10 @@ function compressImage(dataUrl, maxWidth = 600, maxHeight = 600, quality = 0.7) 
             
             const compressedDataUrl = canvas.toDataURL("image/jpeg", quality);
             resolve(compressedDataUrl);
+        };
+        img.onerror = () => {
+            console.warn("Image compression failed, using original");
+            resolve(dataUrl);
         };
     });
 }
@@ -253,52 +262,62 @@ memoriesForm.addEventListener("submit", async (e) => {
     const caption1 = document.getElementById("caption-1").value.trim();
     const caption2 = document.getElementById("caption-2").value.trim();
     
-    if (!name) return;
+    if (!name) {
+        alert("Please enter your name! 😊");
+        return;
+    }
 
     // Change button text to indicate active loading
     const packageBtn = document.getElementById("package-memories-btn");
     packageBtn.disabled = true;
     packageBtn.innerHTML = 'Wrapping Memories... <i class="fa-solid fa-spinner fa-spin"></i>';
 
-    // Save name locally
-    localStorage.setItem("sender_name", name);
+    try {
+        // Save name locally
+        localStorage.setItem("sender_name", name);
 
-    // Compress pictures client-side
-    const compressedImg1 = await compressImage(memoryImages[0]);
-    const compressedImg2 = await compressImage(memoryImages[1]);
+        // Compress pictures client-side
+        const compressedImg1 = await compressImage(memoryImages[0]);
+        const compressedImg2 = await compressImage(memoryImages[1]);
 
-    // Save to Firebase
-    if (firestoreEnabled) {
-        try {
-            await addDoc(collection(db, "memories"), {
-                name: name,
-                photo1: compressedImg1,
-                caption1: caption1,
-                photo2: compressedImg2,
-                caption2: caption2,
-                createdAt: serverTimestamp()
-            });
-            console.log("Memories successfully uploaded to Firebase Firestore! 🌟");
-        } catch (error) {
-            console.error("Failed uploading memories to Firebase, saving to backup:", error);
+        // Save to Firebase
+        if (firestoreEnabled) {
+            try {
+                await addDoc(collection(db, "memories"), {
+                    name: name,
+                    photo1: compressedImg1,
+                    caption1: caption1,
+                    photo2: compressedImg2,
+                    caption2: caption2,
+                    createdAt: serverTimestamp()
+                });
+                console.log("Memories successfully uploaded to Firebase Firestore! 🌟");
+            } catch (error) {
+                console.error("Failed uploading memories to Firebase, saving to backup:", error);
+                saveLocalMemories(name, compressedImg1, caption1, compressedImg2, caption2);
+            }
+        } else {
             saveLocalMemories(name, compressedImg1, caption1, compressedImg2, caption2);
         }
-    } else {
-        saveLocalMemories(name, compressedImg1, caption1, compressedImg2, caption2);
-    }
 
-    // Fade out form and display 3D Packaging scene
-    formWrapper.style.opacity = 0;
-    setTimeout(() => {
-        formWrapper.style.display = "none";
-        packagingScene.style.display = "flex";
-        
-        // Dynamically build the two polaroid items inside the scene (using compressed images)
-        buildPolaroids(compressedImg1, compressedImg2, caption1, caption2);
-        
-        // Start packaging sequence
-        runPackagingSequence();
-    }, 500);
+        // Fade out form and display 3D Packaging scene
+        formWrapper.style.opacity = 0;
+        setTimeout(() => {
+            formWrapper.style.display = "none";
+            packagingScene.style.display = "flex";
+            
+            // Dynamically build the two polaroid items inside the scene (using compressed images)
+            buildPolaroids(compressedImg1, compressedImg2, caption1, caption2);
+            
+            // Start packaging sequence
+            runPackagingSequence();
+        }, 500);
+    } catch (err) {
+        console.error("Error wrapping memories:", err);
+        alert("Something went wrong while wrapping your memories. Please try again! 💖");
+        packageBtn.disabled = false;
+        packageBtn.innerHTML = 'Wrap Memories 🎁';
+    }
 });
 
 function buildPolaroids(img1, img2, cap1, cap2) {

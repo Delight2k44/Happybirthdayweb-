@@ -24,7 +24,12 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
+let analytics;
+try {
+    analytics = getAnalytics(app);
+} catch (e) {
+    console.warn("Analytics init failed:", e);
+}
 
 // Initialize Firestore with fallback
 let db;
