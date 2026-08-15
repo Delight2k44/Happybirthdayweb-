@@ -121,6 +121,17 @@ animateParticles();
 const wishForm = document.getElementById("wish-form");
 const wishesList = document.getElementById("wishes-list");
 const localWishesKey = "birthday_wishes_backup";
+const wishSentKey = "birthday_wish_already_sent";
+
+// Check on page load if user already sent a wish
+const wishFormWrapper = document.getElementById("wish-form-wrapper");
+const wishSuccessState = document.getElementById("wish-success-state");
+
+if (localStorage.getItem(wishSentKey)) {
+    // User already sent a wish — show success state immediately
+    wishFormWrapper.style.display = "none";
+    wishSuccessState.style.display = "block";
+}
 
 function formatDate(timestamp) {
     if (!timestamp) return "Just now";
@@ -214,6 +225,13 @@ if (firestoreEnabled) {
 wishForm.addEventListener("submit", async (e) => {
     e.preventDefault();
     
+    // Double-check: prevent duplicate submissions
+    if (localStorage.getItem(wishSentKey)) {
+        wishFormWrapper.style.display = "none";
+        wishSuccessState.style.display = "block";
+        return;
+    }
+    
     const nameInput = document.getElementById("sender-name");
     const messageInput = document.getElementById("wish-message");
     
@@ -251,9 +269,12 @@ wishForm.addEventListener("submit", async (e) => {
         displayWishes(updated);
     }
     
+    // Mark wish as sent — prevents sending again even after page reload
+    localStorage.setItem(wishSentKey, "true");
+    
     // Show success view
-    document.getElementById("wish-form-wrapper").style.display = "none";
-    document.getElementById("wish-success-state").style.display = "block";
+    wishFormWrapper.style.display = "none";
+    wishSuccessState.style.display = "block";
     
     // Clear inputs
     nameInput.value = "";
